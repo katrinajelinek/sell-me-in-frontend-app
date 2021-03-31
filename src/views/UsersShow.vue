@@ -2,6 +2,12 @@
   <div class="users-show">
     <img :src="`${user.image_url}`" alt="" />
     <h1>{{ user.username }}</h1>
+    <div v-if="$parent.getUserId() == user.id">
+      <router-link :to="`/users/${user.id}/edit`"
+        >Edit your Profile</router-link
+      >
+    </div>
+    <br />
     <h2>Posts:</h2>
     <div v-for="post in user.posts">
       <h3>{{ post.title }}</h3>

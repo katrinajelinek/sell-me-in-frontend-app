@@ -31,15 +31,16 @@ const routes = [
     component: Logout 
   },
   { 
+    path: "/users/:id/edit", 
+    name: "users-edit", 
+    component: UsersEdit
+  },
+  { 
     path: "/users/:id", 
     name: "users-show", 
     component: UsersShow
   },
-  { 
-    path: "/users/edit/:id", 
-    name: "users-edit", 
-    component: UsersEdit
-  },
+
 ]
 
 const router = new VueRouter({
