@@ -6,6 +6,7 @@
       <router-link :to="`/users/${user.id}/edit`"
         >Edit your Profile</router-link
       >
+      <router-link to="/posts/new">Create a Post</router-link>
     </div>
     <br />
     <h2>Posts:</h2>
