@@ -3,6 +3,7 @@
     <div v-for="post in posts">
       <h1>{{ post.title }}</h1>
       <h3>Made by: {{ post.user.username }}</h3>
+      <embed :src="`${post.video_url}`" type="" />
       <h3>Price: {{ post.price }}</h3>
       <p>Description: {{ post.description }}</p>
       <p>Location: {{ post.location }}</p>

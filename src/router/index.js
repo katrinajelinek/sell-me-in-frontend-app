@@ -7,6 +7,7 @@ import Logout from "../views/Logout.vue";
 import UsersShow from "../views/UsersShow.vue";
 import UsersEdit from "../views/UsersEdit.vue";
 import PostsShow from "../views/PostsShow.vue";
+import PostsNew from "../views/PostsNew.vue";
 import CategoriesIndex from "../views/CategoriesIndex.vue";
 import CategoriesShow from "../views/CategoriesShow.vue";
 
@@ -42,6 +43,11 @@ const routes = [
     path: "/users/:id", 
     name: "users-show", 
     component: UsersShow
+  },
+  { 
+    path: "/posts/new", 
+    name: "posts-new", 
+    component: PostsNew
   },
   { 
     path: "/posts/:id", 
