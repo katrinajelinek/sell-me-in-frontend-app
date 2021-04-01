@@ -29,6 +29,7 @@
       <button type="submit">
         Update
       </button>
+      <button v-on:click="destroyUser()">Delete Profile</button>
     </form>
     <form v-if="passwordUpdateToggle">
       <div class="form-group">
@@ -94,6 +95,16 @@ export default {
         .catch((error) => {
           this.errors = error.response.data.errors;
         });
+    },
+    destroyUser: function() {
+      if (confirm("Are you sure you want to delete your account?")) {
+        axios.delete(`/api/users/${this.user.id}`).then((response) => {
+          console.log("Success", response.data);
+          localStorage.removeItem("jwt");
+          localStorage.removeItem("user_id");
+          this.$router.push("/");
+        });
+      }
     },
   },
 };
