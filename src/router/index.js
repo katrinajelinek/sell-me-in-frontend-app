@@ -8,6 +8,7 @@ import UsersShow from "../views/UsersShow.vue";
 import UsersEdit from "../views/UsersEdit.vue";
 import PostsShow from "../views/PostsShow.vue";
 import CategoriesIndex from "../views/CategoriesIndex.vue";
+import CategoriesShow from "../views/CategoriesShow.vue";
 
 Vue.use(VueRouter)
 
@@ -51,6 +52,11 @@ const routes = [
     path: "/categories", 
     name: "categories-index", 
     component: CategoriesIndex
+  },
+  { 
+    path: "/categories/:id", 
+    name: "categories-show", 
+    component: CategoriesShow
   },
 ]
 
