@@ -33,6 +33,7 @@
       </div> -->
       <input type="submit" class="btn btn-primary" value="Submit" />
     </form>
+    <button v-on:click="destroyPost()">Delete</button>
   </div>
 </template>
 
@@ -70,6 +71,14 @@ export default {
         .catch((error) => {
           this.errors = error.response.data.errors;
         });
+    },
+    destroyPost: function() {
+      if (confirm("Are you sure you want to delete your post?")) {
+        axios.delete(`/api/posts/${this.post.id}`).then((response) => {
+          console.log("success", response.data);
+          this.$router.push(`/users/${this.post.user_id}`);
+        });
+      }
     },
   },
 };
