@@ -8,6 +8,7 @@ import UsersShow from "../views/UsersShow.vue";
 import UsersEdit from "../views/UsersEdit.vue";
 import PostsShow from "../views/PostsShow.vue";
 import PostsNew from "../views/PostsNew.vue";
+import PostsEdit from "../views/PostsEdit.vue";
 import CategoriesIndex from "../views/CategoriesIndex.vue";
 import CategoriesShow from "../views/CategoriesShow.vue";
 
@@ -35,7 +36,7 @@ const routes = [
     component: Logout 
   },
   { 
-    path: "/users/:id/edit", 
+    path: "/users/edit/:id", 
     name: "users-edit", 
     component: UsersEdit
   },
@@ -53,6 +54,11 @@ const routes = [
     path: "/posts/:id", 
     name: "posts-show", 
     component: PostsShow
+  },
+  { 
+    path: "/posts/edit/:id", 
+    name: "posts-edit", 
+    component: PostsEdit
   },
   { 
     path: "/categories", 

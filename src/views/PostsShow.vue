@@ -35,7 +35,9 @@ import axios from "axios";
 export default {
   data: function() {
     return {
-      post: {},
+      post: {
+        user: {},
+      },
     };
   },
   created: function() {
