@@ -6,6 +6,7 @@ import Login from "../views/Login.vue";
 import Logout from "../views/Logout.vue";
 import UsersShow from "../views/UsersShow.vue";
 import UsersEdit from "../views/UsersEdit.vue";
+import PostsShow from "../views/PostsShow.vue";
 
 Vue.use(VueRouter)
 
@@ -40,7 +41,11 @@ const routes = [
     name: "users-show", 
     component: UsersShow
   },
-
+  { 
+    path: "/posts/:id", 
+    name: "posts-show", 
+    component: PostsShow
+  },
 ]
 
 const router = new VueRouter({
@@ -49,4 +54,4 @@ const router = new VueRouter({
   routes
 })
 
-export default router
+export default router;
