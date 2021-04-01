@@ -1,7 +1,9 @@
 <template>
   <div class="posts-show">
     <h1>{{ post.title }}</h1>
-    <router-link :to="`/posts/edit/${post.id}`">Edit Post</router-link>
+    <div v-if="$parent.getUserId() == post.user_id">
+      <router-link :to="`/posts/edit/${post.id}`">Edit Post</router-link>
+    </div>
     <h3>
       Made by:
       <router-link :to="`/users/${post.user_id}`">{{
