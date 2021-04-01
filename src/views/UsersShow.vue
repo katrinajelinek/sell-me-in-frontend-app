@@ -13,7 +13,9 @@
     <h2>Posts:</h2>
     <div v-for="post in user.posts">
       <embed :src="`${post.video_url}`" type="" />
-      <h3>{{ post.title }}</h3>
+      <h3>
+        <router-link :to="`/posts/${post.id}`">{{ post.title }}</router-link>
+      </h3>
       <div v-if="$parent.getUserId() == post.user_id">
         <router-link :to="`/posts/edit/${post.id}`">Edit your Post</router-link>
       </div>
