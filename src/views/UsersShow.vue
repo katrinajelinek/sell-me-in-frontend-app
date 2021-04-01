@@ -6,11 +6,13 @@
       <router-link :to="`/users/${user.id}/edit`"
         >Edit your Profile</router-link
       >
+      <br />
       <router-link to="/posts/new">Create a Post</router-link>
     </div>
     <br />
     <h2>Posts:</h2>
     <div v-for="post in user.posts">
+      <embed :src="`${post.video_url}`" type="" />
       <h3>{{ post.title }}</h3>
       <p>Price: {{ post.price }}</p>
       <p>Location: {{ post.location }}</p>
