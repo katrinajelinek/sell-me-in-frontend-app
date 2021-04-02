@@ -3,7 +3,7 @@
     <img :src="`${user.image_url}`" alt="" />
     <h1>{{ user.username }}</h1>
     <div v-if="$parent.getUserId() == user.id">
-      <router-link :to="`/users/${user.id}/edit`"
+      <router-link :to="`/users/edit/${user.id}`"
         >Edit your Profile</router-link
       >
       <br />
