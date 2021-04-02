@@ -27,6 +27,31 @@
         <label>Video Url:</label>
         <input type="text" class="form-control" v-model="post.video_url" />
       </div>
+      <div class="form-group">
+        <div>
+          <multiselect
+            v-model="values"
+            :options="categories"
+            :multiple="true"
+            :close-on-select="false"
+            :clear-on-select="false"
+            :preserve-search="true"
+            placeholder="Categories"
+            label="name"
+            track-by="name"
+            :preselect-first="true"
+          >
+            <template slot="selection" slot-scope="{ values, isOpen }"
+              ><span
+                class="multiselect__single"
+                v-if="values.length &amp;&amp; !isOpen"
+                >{{ values.length }} categories selected</span
+              ></template
+            >
+          </multiselect>
+          <!-- <pre class="language-json"><code>{{ value  }}</code></pre> -->
+        </div>
+      </div>
       <!-- <div class="form-group">
         <label>Image Url:</label>
         <input type="text" class="form-control" v-model="imageUrl" />
@@ -39,28 +64,47 @@
 
 <script>
 import axios from "axios";
+import Multiselect from "vue-multiselect";
 
 export default {
+  components: {
+    Multiselect,
+  },
   data: function() {
     return {
       post: {},
       errors: [],
+      values: [],
+      categories: [],
     };
   },
   created: function() {
-    axios.get(`/api/posts/${this.$route.params.id}`).then((response) => {
-      console.log(response.data);
-      this.post = response.data;
-    });
+    this.showPost();
+    this.indexCategories();
   },
   methods: {
+    showPost: function() {
+      axios.get(`/api/posts/${this.$route.params.id}`).then((response) => {
+        console.log(response.data);
+        this.post = response.data;
+        this.values = response.data.categories;
+      });
+    },
+    indexCategories: function() {
+      axios.get("/api/categories").then((response) => {
+        console.log(response.data);
+        this.categories = response.data;
+      });
+    },
     updatePost: function(post) {
+      var categoryIds = this.values.map((category) => category.id);
       var params = {
         title: post.title,
         price: post.price,
         location: post.location,
         description: post.description,
         video_url: post.video_url,
+        category_ids: categoryIds,
       };
       axios
         .patch(`/api/posts/${post.id}`, params)
@@ -83,3 +127,5 @@ export default {
   },
 };
 </script>
+
+<style src="vue-multiselect/dist/vue-multiselect.min.css"></style>
