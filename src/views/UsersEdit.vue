@@ -93,11 +93,14 @@ export default {
     },
     updateUser: function(user) {
       var formData = new FormData();
-      formData.append("first_name", user.firstName);
-      formData.append("last_name", user.lastName);
+      formData.append("first_name", user.first_name);
+      formData.append("last_name", user.last_name);
       formData.append("username", user.username);
       formData.append("email", user.email);
-      formData.append("image", this.image);
+      if (this.image) {
+        formData.append("image", this.image);
+      }
+      formData.append("password", user.password);
       formData.append("old_password", this.oldPassword);
       formData.append("password", this.password);
       formData.append("password_confirmation", this.passwordConfirmation);
