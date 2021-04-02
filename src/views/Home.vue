@@ -1,20 +1,35 @@
 <template>
   <div class="home">
     <div v-for="post in posts">
-      <h1>{{ post.title }}</h1>
-      <h3>Made by: {{ post.user.username }}</h3>
+      <router-link :to="`/posts/${post.id}`"
+        ><h1>{{ post.title }}</h1></router-link
+      >
+      <h3>
+        Made by:
+        <router-link :to="`/users/${post.user_id}`">{{
+          post.user.username
+        }}</router-link>
+      </h3>
       <embed :src="`${post.video_url}`" type="" />
       <h3>Price: {{ post.price }}</h3>
       <p>Description: {{ post.description }}</p>
       <p>Location: {{ post.location }}</p>
       <h4>Categories:</h4>
       <div v-for="category in post.categories">
-        <p>{{ category.name }}</p>
+        <p>
+          <router-link :to="`/categories/${category.id}`">{{
+            category.name
+          }}</router-link>
+        </p>
       </div>
     </div>
     <h4>All Categories:</h4>
     <div v-for="category in categories">
-      <p>{{ category.name }}</p>
+      <p>
+        <router-link :to="`/categories/${category.id}`">{{
+          category.name
+        }}</router-link>
+      </p>
     </div>
   </div>
 </template>
