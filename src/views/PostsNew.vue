@@ -81,7 +81,7 @@ export default {
       categories: [],
     };
   },
-  created: function() {
+  created: function () {
     this.indexCategories();
   },
   methods: {
