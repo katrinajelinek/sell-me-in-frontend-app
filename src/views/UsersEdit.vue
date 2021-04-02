@@ -20,6 +20,15 @@
         <input type="text" class="form-control" v-model="user.username" />
       </div>
       <div class="form-group">
+        <label>Change your Picture:</label>
+        <input
+          type="file"
+          class="form-control"
+          v-on:change="setFile($event)"
+          ref="fileInput"
+        />
+      </div>
+      <div class="form-group">
         <label>Email:</label>
         <input type="email" class="form-control" v-model="user.email" />
       </div>
@@ -34,7 +43,7 @@
     <form v-if="passwordUpdateToggle">
       <div class="form-group">
         <label>Old Password:</label>
-        <input type="password" class="form-control" v-model="old_password" />
+        <input type="password" class="form-control" v-model="oldPassword" />
       </div>
       <div class="form-group">
         <label>New Password:</label>
@@ -45,7 +54,7 @@
         <input
           type="password"
           class="form-control"
-          v-model="password_confirmation"
+          v-model="passwordConfirmation"
         />
       </div>
       <button v-on:click="updateUser()">
@@ -62,9 +71,10 @@ export default {
   data: function() {
     return {
       user: {},
-      old_password: "",
+      image: "",
+      oldPassword: "",
       password: "",
-      password_confirmation: "",
+      passwordConfirmation: "",
       passwordUpdateToggle: false,
       errors: [],
     };
@@ -76,18 +86,23 @@ export default {
     });
   },
   methods: {
+    setFile: function(event) {
+      if (event.target.files.length > 0) {
+        this.image = event.target.files[0];
+      }
+    },
     updateUser: function(user) {
-      var params = {
-        first_name: user.first_name,
-        last_name: user.last_name,
-        username: user.username,
-        email: user.email,
-        old_password: this.old_password,
-        password: this.password,
-        password_confirmation: this.password_confirmation,
-      };
+      var formData = new FormData();
+      formData.append("first_name", user.firstName);
+      formData.append("last_name", user.lastName);
+      formData.append("username", user.username);
+      formData.append("email", user.email);
+      formData.append("image", this.image);
+      formData.append("old_password", this.oldPassword);
+      formData.append("password", this.password);
+      formData.append("password_confirmation", this.passwordConfirmation);
       axios
-        .patch(`/api/users/${this.user.id}`, params)
+        .patch(`/api/users/${this.user.id}`, formData)
         .then((response) => {
           console.log(response.data);
           this.$router.push(`/users/${this.user.id}`);
