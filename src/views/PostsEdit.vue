@@ -49,13 +49,8 @@
               ></template
             >
           </multiselect>
-          <!-- <pre class="language-json"><code>{{ value  }}</code></pre> -->
         </div>
       </div>
-      <!-- <div class="form-group">
-        <label>Image Url:</label>
-        <input type="text" class="form-control" v-model="imageUrl" />
-      </div> -->
       <input type="submit" class="btn btn-primary" value="Submit" />
     </form>
     <button v-on:click="destroyPost()">Delete</button>
@@ -68,7 +63,12 @@
       </ul>
       <div class="form-group">
         <label>Add Images:</label>
-        <input type="text" class="form-control" v-model="imageUrl" />
+        <input
+          type="file"
+          class="form-control"
+          v-on:change="setFile($event)"
+          ref="fileInput"
+        />
       </div>
       <input type="submit" class="btn btn-primary" value="Add Image" />
     </form>
@@ -94,7 +94,7 @@ export default {
   data: function() {
     return {
       post: {},
-      imageUrl: "",
+      image: "",
       images: [],
       errors: [],
       values: [],
@@ -106,17 +106,21 @@ export default {
     this.indexCategories();
   },
   methods: {
+    setFile: function(event) {
+      if (event.target.files.length > 0) {
+        this.image = event.target.files[0];
+      }
+    },
     createImage: function() {
-      var params = {
-        post_id: this.post.id,
-        image_url: this.imageUrl,
-      };
+      var formData = new FormData();
+      formData.append("post_id", this.post.id);
+      formData.append("image", this.image);
       axios
-        .post("/api/images", params)
+        .post("/api/images", formData)
         .then((response) => {
+          this.image = "";
           console.log(response.data);
           this.images.push(response.data);
-          this.imageUrl = "";
         })
         .catch((error) => {
           this.errors = error.response.data.errors;
