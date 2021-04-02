@@ -26,6 +26,23 @@
     </div>
     <div v-for="image in post.images">
       <img :src="`${image.image_url}`" />
+      <div v-if="post.user_id === $parent.getUserId()">
+        <button v-on:click="destroyImage(image)">Delete Image</button>
+      </div>
+    </div>
+    <div v-if="post.user_id === $parent.getUserId()">
+      <form v-on:submit.prevent="createImage()">
+        <ul>
+          <li class="text-danger" v-for="error in errors" v-bind:key="error">
+            {{ error }}
+          </li>
+        </ul>
+        <div class="form-group">
+          <label>Add Images:</label>
+          <input type="text" class="form-control" v-model="imageUrl" />
+        </div>
+        <input type="submit" class="btn btn-primary" value="Add Image" />
+      </form>
     </div>
   </div>
 </template>
@@ -40,14 +57,44 @@ export default {
       post: {
         user: {},
       },
+      images: [],
+      imageUrl: "",
+      errors: [],
     };
   },
   created: function() {
     axios.get(`/api/posts/${this.$route.params.id}`).then((response) => {
       console.log(response.data);
       this.post = response.data;
+      this.images = response.data.images;
     });
   },
-  methods: {},
+  methods: {
+    createImage: function() {
+      var params = {
+        post_id: this.post.id,
+        image_url: this.imageUrl,
+      };
+      axios
+        .post("/api/images", params)
+        .then((response) => {
+          console.log(response.data);
+          this.images.push(response.data);
+          this.imageUrl = "";
+        })
+        .catch((error) => {
+          this.errors = error.response.data.errors;
+        });
+    },
+    destroyImage: function(image) {
+      if (confirm("Are you sure you want to delete your image?")) {
+        var index = this.images.indexOf(image);
+        axios.delete(`/api/images/${image.id}`).then((response) => {
+          console.log("success", response.data);
+          this.images.splice(index, 1);
+        });
+      }
+    },
+  },
 };
 </script>

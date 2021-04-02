@@ -111,11 +111,16 @@ export default {
         post_id: this.post.id,
         image_url: this.imageUrl,
       };
-      axios.post("/api/images", params).then((response) => {
-        console.log(response.data);
-        this.images.push(response.data);
-        this.imageUrl = "";
-      });
+      axios
+        .post("/api/images", params)
+        .then((response) => {
+          console.log(response.data);
+          this.images.push(response.data);
+          this.imageUrl = "";
+        })
+        .catch((error) => {
+          this.errors = error.response.data.errors;
+        });
     },
     destroyImage: function(image) {
       if (confirm("Are you sure you want to delete your image?")) {

@@ -58,7 +58,6 @@
       </div> -->
       <input type="submit" class="btn btn-primary" value="Submit" />
     </form>
-    
   </div>
 </template>
 
@@ -101,7 +100,7 @@ export default {
         .post("/api/posts", params)
         .then((response) => {
           console.log(response.data);
-          this.$router.push("/");
+          this.$router.push(`/posts/${response.data.id}`);
         })
         .catch((error) => {
           this.errors = error.response.data.errors;
