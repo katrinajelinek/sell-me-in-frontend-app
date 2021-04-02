@@ -20,6 +20,15 @@
         <input type="text" class="form-control" v-model="username" />
       </div>
       <div class="form-group">
+        <label>Upload an Image:</label>
+        <input
+          type="file"
+          class="form-control"
+          v-on:change="setFile($event)"
+          ref="fileInput"
+        />
+      </div>
+      <div class="form-group">
         <label>Email:</label>
         <input type="email" class="form-control" v-model="email" />
       </div>
@@ -61,6 +70,7 @@ export default {
       firstName: "",
       lastName: "",
       username: "",
+      image: "",
       email: "",
       password: "",
       passwordConfirmation: "",
@@ -70,19 +80,28 @@ export default {
     };
   },
   methods: {
+    setFile: function(event) {
+      if (event.target.files.length > 0) {
+        this.image = event.target.files[0];
+      }
+    },
     submit: function() {
-      var params = {
-        first_name: this.firstName,
-        last_name: this.lastName,
-        username: this.username,
-        email: this.email,
-        password: this.password,
-        password_confirmation: this.passwordConfirmation,
-        terms_and_conditions_agreement: this.termsAndConditionsAgreement,
-        disclaimer_agreement: this.disclaimerAgreement,
-      };
+      var formData = new FormData();
+      formData.append("first_name", this.firstName);
+      formData.append("last_name", this.lastName);
+      formData.append("username", this.username);
+      formData.append("email", this.email);
+      formData.append("image", this.image);
+      formData.append("password", this.password);
+      formData.append("password_confirmation", this.passwordConfirmation);
+      formData.append(
+        "terms_and_conditions_agreement",
+        this.termsAndConditionsAgreement
+      );
+      formData.append("disclaimer_agreement", this.disclaimerAgreement);
+
       axios
-        .post("/api/users", params)
+        .post("/api/users", formData)
         .then((response) => {
           console.log(response.data);
           this.$router.push("/login");
