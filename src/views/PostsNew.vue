@@ -24,8 +24,13 @@
         <input type="text" class="form-control" v-model="description" />
       </div>
       <div class="form-group">
-        <label>Video Url:</label>
-        <input type="text" class="form-control" v-model="videoUrl" />
+        <label>Upload your pitch:</label>
+        <input
+          type="file"
+          class="form-control"
+          v-on:change="setFile($event)"
+          ref="fileInput"
+        />
       </div>
       <div class="form-group">
         <div>
@@ -75,7 +80,7 @@ export default {
       price: "",
       location: "",
       description: "",
-      videoUrl: "",
+      video: "",
       imageUrl: "",
       errors: [],
       values: [],
@@ -86,18 +91,22 @@ export default {
     this.indexCategories();
   },
   methods: {
+    setFile: function(event) {
+      if (event.target.files.length > 0) {
+        this.video = event.target.files[0];
+      }
+    },
     submit: function() {
       var categoryIds = this.values.map((category) => category.id);
-      var params = {
-        title: this.title,
-        price: this.price,
-        location: this.location,
-        description: this.description,
-        video_url: this.videoUrl,
-        category_ids: categoryIds,
-      };
+      var formData = new FormData();
+      formData.append("title", this.title);
+      formData.append("price", this.price);
+      formData.append("location", this.location);
+      formData.append("description", this.description);
+      formData.append("video", this.video);
+      formData.append("category_ids", categoryIds);
       axios
-        .post("/api/posts", params)
+        .post("/api/posts", formData)
         .then((response) => {
           console.log(response.data);
           this.$router.push(`/posts/${response.data.id}`);
