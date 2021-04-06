@@ -104,7 +104,7 @@ export default {
       formData.append("location", this.location);
       formData.append("description", this.description);
       formData.append("video", this.video);
-      formData.append("category_ids", categoryIds);
+      formData.append("category_ids", JSON.stringify(categoryIds));
       axios
         .post("/api/posts", formData)
         .then((response) => {
