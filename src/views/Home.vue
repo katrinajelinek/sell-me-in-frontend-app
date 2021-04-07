@@ -1,5 +1,6 @@
 <template>
   <div class="home">
+    <h1>Sell Me In</h1>
     <div>
       <multiselect
         v-model="categoriesFilter"
