@@ -1,11 +1,6 @@
 <template>
   <div class="home">
     <div v-cloak>
-      <p>
-        Let us locate you for better results...
-        <button @click="locateMe">Get location</button>
-      </p>
-
       <div v-if="errorStr">
         Sorry, but the following error occurred: {{ errorStr }}
       </div>
@@ -111,6 +106,23 @@ export default {
   created: function() {
     this.indexPosts();
     this.indexCategories();
+    if (!("geolocation" in navigator)) {
+      this.errorStr = "Geolocation is not available.";
+      return;
+    }
+
+    this.gettingLocation = true;
+    // get position
+    navigator.geolocation.getCurrentPosition(
+      (pos) => {
+        this.gettingLocation = false;
+        this.location = pos;
+      },
+      (err) => {
+        this.gettingLocation = false;
+        this.errorStr = err.message;
+      }
+    );
   },
   computed: {
     filteredPostsByCategories() {
@@ -138,32 +150,6 @@ export default {
         posts = this.filterBy(posts, category.name);
       });
       return posts;
-    },
-    async getLocation() {
-      return new Promise((resolve, reject) => {
-        if (!("geolocation" in navigator)) {
-          reject(new Error("Geolocation is not available."));
-        }
-
-        navigator.geolocation.getCurrentPosition(
-          (pos) => {
-            resolve(pos);
-          },
-          (err) => {
-            reject(err);
-          }
-        );
-      });
-    },
-    async locateMe() {
-      this.gettingLocation = true;
-      try {
-        this.gettingLocation = false;
-        this.location = await this.getLocation();
-      } catch (e) {
-        this.gettingLocation = false;
-        this.errorStr = e.message;
-      }
     },
   },
 };
