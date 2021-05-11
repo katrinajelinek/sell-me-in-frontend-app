@@ -10,23 +10,35 @@
       <router-link to="/posts/new">Create a Post</router-link>
     </div>
     <br />
+    <button v-on:click="boughtToggle = !boughtToggle">
+      Checkout bought posts
+    </button>
     <h2>Posts:</h2>
     <div v-for="post in user.posts">
-      <embed :src="`${post.video_url}`" type="" />
-      <h3>
-        <router-link :to="`/posts/${post.id}`">{{ post.title }}</router-link>
-      </h3>
-      <div v-if="$parent.getUserId() == post.user_id">
-        <router-link :to="`/posts/edit/${post.id}`">Edit your Post</router-link>
+      <div v-if="post.bought == boughtToggle">
+        <embed :src="`${post.video_url}`" type="" />
+        <h3>
+          <router-link :to="`/posts/${post.id}`">{{ post.title }}</router-link>
+        </h3>
+        <div v-if="$parent.getUserId() == post.user_id">
+          <router-link :to="`/posts/edit/${post.id}`"
+            >Edit your Post</router-link
+          >
+        </div>
+        <p>Price: {{ post.price }}</p>
+        <p>Location: {{ post.location }}</p>
+        <p>Description: {{ post.description }}</p>
+        <h5>Categories:</h5>
+        <div v-for="category in post.categories">
+          <p>{{ category.name }}</p>
+        </div>
+        <div v-if="$parent.getUserId() == user.id">
+          <div v-if="post.bought == false">
+            <button v-on:click="updatePost(post)">Mark post as bought</button>
+          </div>
+        </div>
+        <br />
       </div>
-      <p>Price: {{ post.price }}</p>
-      <p>Location: {{ post.location }}</p>
-      <p>Description: {{ post.description }}</p>
-      <h5>Categories:</h5>
-      <div v-for="category in post.categories">
-        <p>{{ category.name }}</p>
-      </div>
-      <br />
     </div>
   </div>
 </template>
@@ -38,7 +50,10 @@ import axios from "axios";
 export default {
   data: function() {
     return {
-      user: {},
+      user: {
+        posts: [],
+      },
+      boughtToggle: false,
     };
   },
   created: function() {
@@ -50,6 +65,22 @@ export default {
         console.log(response.data);
         this.user = response.data;
       });
+    },
+    updatePost: function(post) {
+      var formData = new FormData();
+      var index = this.user.posts.indexOf(post);
+      console.log(index);
+      formData.append("bought", true);
+      axios
+        .patch(`/api/posts/${post.id}`, formData)
+        .then((response) => {
+          console.log(response.data);
+          post.bought = true;
+          this.user.posts[index] = response.data;
+        })
+        .catch((error) => {
+          this.errors = error.response.data.errors;
+        });
     },
   },
 };
