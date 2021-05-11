@@ -17,6 +17,10 @@
 
     <h1>Sell Me In</h1>
     <div>
+      <input type="text" v-model="search" placeholder="Search title..." />
+      <label>Search title:</label>
+    </div>
+    <div>
       <multiselect
         v-model="categoriesFilter"
         :options="categories"
@@ -98,6 +102,7 @@ export default {
       values: [],
       sortAttribute: "created_at",
       titleFilter: "",
+      search: "",
       location: null,
       gettingLocation: false,
       errorStr: null,
@@ -127,6 +132,11 @@ export default {
   computed: {
     filteredPostsByCategories() {
       return this.getByCategory(this.posts, this.categoriesFilter);
+    },
+    filteredList() {
+      return this.postList.filter((post) => {
+        return post.title.toLowerCase().includes(this.search.toLowerCase());
+      });
     },
   },
   methods: {
