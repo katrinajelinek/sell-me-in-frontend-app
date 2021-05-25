@@ -50,17 +50,19 @@
         <div class="form-group">
           <label>I have ready and agree to the terms and conditions</label>
           <input
-            type="text"
+            type="checkbox"
             class="form-control"
             v-model="termsAndConditionsAgreement"
+            checked="true"
           />
         </div>
         <div class="form-group">
           <label>I have ready and agree to the SellMeIn disclaimer</label>
           <input
-            type="text"
+            type="checkbox"
             class="form-control"
             v-model="disclaimerAgreement"
+            checked="true"
           />
         </div>
       </div>
