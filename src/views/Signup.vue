@@ -53,7 +53,7 @@
             type="checkbox"
             class="form-control"
             v-model="termsAndConditionsAgreement"
-            checked="true"
+            checked="false"
           />
         </div>
         <div class="form-group">
@@ -62,7 +62,7 @@
             type="checkbox"
             class="form-control"
             v-model="disclaimerAgreement"
-            checked="true"
+            checked="false"
           />
         </div>
       </div>
@@ -90,8 +90,8 @@ export default {
       email: "",
       password: "",
       passwordConfirmation: "",
-      termsAndConditionsAgreement: "",
-      disclaimerAgreement: "",
+      termsAndConditionsAgreement: false,
+      disclaimerAgreement: false,
       errors: [],
       termsAndDisclaimerToggle: false,
     };
