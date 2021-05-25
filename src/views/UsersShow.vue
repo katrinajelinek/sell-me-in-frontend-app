@@ -15,7 +15,7 @@
     </button>
     <h2>Posts:</h2>
     <div v-for="post in user.posts">
-      <div v-if="post.bought == boughtToggle">
+      <div v-if="post.bought == false">
         <embed :src="`${post.video_url}`" type="" />
         <h3>
           <router-link :to="`/posts/${post.id}`">{{ post.title }}</router-link>
@@ -38,6 +38,35 @@
           </div>
         </div>
         <br />
+      </div>
+      <div v-if="post.bought == boughtToggle">
+        <div v-if="post.bought == true">
+          <embed :src="`${post.video_url}`" type="" />
+          <h3>
+            <router-link :to="`/posts/${post.id}`">{{
+              post.title
+            }}</router-link>
+          </h3>
+          <h4>This has been bought</h4>
+          <div v-if="$parent.getUserId() == post.user_id">
+            <router-link :to="`/posts/edit/${post.id}`"
+              >Edit your Post</router-link
+            >
+          </div>
+          <p>Price: {{ post.price }}</p>
+          <p>Location: {{ post.location }}</p>
+          <p>Description: {{ post.description }}</p>
+          <h5>Categories:</h5>
+          <div v-for="category in post.categories">
+            <p>{{ category.name }}</p>
+          </div>
+          <div v-if="$parent.getUserId() == user.id">
+            <div v-if="post.bought == false">
+              <button v-on:click="updatePost(post)">Mark post as bought</button>
+            </div>
+          </div>
+          <br />
+        </div>
       </div>
     </div>
   </div>
