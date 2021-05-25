@@ -44,18 +44,32 @@
           v-model="passwordConfirmation"
         />
       </div>
-      <div class="form-group">
-        <label>Terms and Conditions Agreement:</label>
-        <input
-          type="text"
-          class="form-control"
-          v-model="termsAndConditionsAgreement"
-        />
+      <div v-if="termsAndDisclaimerToggle == true">
+        <h4>These are terms and conditions</h4>
+        <h4>This is a disclaimer</h4>
+        <div class="form-group">
+          <label>I have ready and agree to the terms and conditions</label>
+          <input
+            type="text"
+            class="form-control"
+            v-model="termsAndConditionsAgreement"
+          />
+        </div>
+        <div class="form-group">
+          <label>I have ready and agree to the SellMeIn disclaimer</label>
+          <input
+            type="text"
+            class="form-control"
+            v-model="disclaimerAgreement"
+          />
+        </div>
       </div>
-      <div class="form-group">
-        <label>Disclaimer Agreement:</label>
-        <input type="text" class="form-control" v-model="disclaimerAgreement" />
+      <div v-if="termsAndDisclaimerToggle == false">
+        <button v-on:click="termsAndDisclaimerToggle = true">
+          click to read terms and conditions agreement
+        </button>
       </div>
+
       <input type="submit" class="btn btn-primary" value="Submit" />
     </form>
   </div>
@@ -77,6 +91,7 @@ export default {
       termsAndConditionsAgreement: "",
       disclaimerAgreement: "",
       errors: [],
+      termsAndDisclaimerToggle: false,
     };
   },
   methods: {
