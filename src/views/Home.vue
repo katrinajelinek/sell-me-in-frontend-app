@@ -20,7 +20,7 @@
       <input type="text" v-model="search" placeholder="Search title..." />
       <label>Search title:</label>
     </div>
-    <div>
+    <!-- <div>
       <multiselect
         v-model="categoriesFilter"
         :options="categories"
@@ -41,10 +41,40 @@
           ></template
         >
       </multiselect>
+    </div> -->
+    <div v-for="category in categories">
+      <input
+        type="checkbox"
+        v-model="checkedCategories"
+        v-bind:value="category"
+      />
+      {{ category.name }}
     </div>
+    <!-- <div>
+      <input
+        type="checkbox"
+        v-model="currentLocationToggle"
+        true-value="yes"
+        false-value="no"
+      />
+      <label>Current Location</label>
+    </div>
+    <div v-for="category in categories">
+      <input
+        type="checkbox"
+        v-model="categoryToggle"
+        true-value="yes"
+        false-value="no"
+      />
+      <label
+        ><router-link :to="`/categories/${category.id}`">{{
+          category.name
+        }}</router-link></label
+      >
+    </div> -->
     <div
       v-for="post in orderBy(
-        filterBy(filteredPostsByCategories, titleFilter, 'title'),
+        filterBy(filteredByCategories, titleFilter, 'title'),
         sortAttribute,
         -1
       )"
@@ -62,14 +92,6 @@
       <h3>Price: {{ post.price }}</h3>
       <p>Description: {{ post.description }}</p>
       <p>Location: {{ post.location }}</p>
-      <h4>Categories:</h4>
-      <div v-for="category in post.categories">
-        <p>
-          <router-link :to="`/categories/${category.id}`">{{
-            category.name
-          }}</router-link>
-        </p>
-      </div>
     </div>
     <h4>All Categories:</h4>
     <div v-for="category in categories">
@@ -86,13 +108,13 @@
 
 <script>
 import axios from "axios";
-import Multiselect from "vue-multiselect";
+// import Multiselect from "vue-multiselect";
 import Vue2Filters from "vue2-filters";
 
 export default {
   mixins: [Vue2Filters.mixin],
   components: {
-    Multiselect,
+    // Multiselect,
   },
   data: function() {
     return {
@@ -103,6 +125,9 @@ export default {
       sortAttribute: "created_at",
       titleFilter: "",
       search: "",
+      // currentLocationToggle: "yes",
+      // categoryToggle: "no",
+      checkedCategories: [],
       location: null,
       gettingLocation: false,
       errorStr: null,
@@ -137,6 +162,17 @@ export default {
       return this.postList.filter((post) => {
         return post.title.toLowerCase().includes(this.search.toLowerCase());
       });
+    },
+    filteredByCategories() {
+      if (!this.checkedCategories.length) {
+        return this.posts;
+      } else {
+        return this.posts.filter((post) =>
+          this.checkedCategories
+            .toLowerCase()
+            .includes(post.categories.toLowerCase())
+        );
+      }
     },
   },
   methods: {

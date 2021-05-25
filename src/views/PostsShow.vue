@@ -10,8 +10,22 @@
         post.user.username
       }}</router-link>
       <br />
-      <button>Contact Seller</button>
     </h3>
+    <div v-if="messageToggle == false">
+      <button v-on:click="messageToggle = true">
+        Contact Seller
+      </button>
+    </div>
+    <div v-if="messageToggle == true">
+      <form v-on:submit.prevent="createMessage()">
+        <div class="form-group">
+          <label>Message:</label>
+          <textarea v-model="message" cols="30" rows="10"></textarea>
+        </div>
+        <input type="submit" class="btn btn-primary" value="Submit" />
+      </form>
+    </div>
+    <br />
     <embed :src="`${post.video_url}`" type="" />
     <h3>Price: {{ post.price }}</h3>
     <p>Description: {{ post.description }}</p>
@@ -65,6 +79,8 @@ export default {
       images: [],
       image: "",
       errors: [],
+      messageToggle: false,
+      message: "",
     };
   },
   created: function() {
@@ -79,6 +95,21 @@ export default {
       if (event.target.files.length > 0) {
         this.image = event.target.files[0];
       }
+    },
+    createMessage: function() {
+      var params = {
+        message: this.message,
+        post_creator: this.post.user_id,
+      };
+      axios
+        .post("/api/messages", params)
+        .then((response) => {
+          console.log(response.data);
+          this.messageToggle = false;
+        })
+        .catch((error) => {
+          this.errors = error.response.data.errors;
+        });
     },
     createImage: function() {
       var formData = new FormData();
