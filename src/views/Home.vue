@@ -20,33 +20,32 @@
       <input type="text" v-model="search" placeholder="Search title..." />
       <label>Search title:</label>
     </div>
-    <!-- <div>
+    <div>
       <multiselect
-        v-model="categoriesFilter"
-        :options="categories"
+        v-model="locationsFilter"
+        :options="locations"
         :multiple="true"
         :close-on-select="false"
         :clear-on-select="false"
         :preserve-search="true"
-        placeholder="Search by Categories"
-        label="name"
-        track-by="name"
+        placeholder="Search by Location"
         :preselect-first="true"
       >
         <template slot="selection" slot-scope="{ values, isOpen }"
           ><span
             class="multiselect__single"
             v-if="values.length &amp;&amp; !isOpen"
-            >{{ values.length }} categories selected</span
+            >{{ values.length }} locations selected</span
           ></template
         >
       </multiselect>
-    </div> -->
+    </div>
+    {{ locationsFilter }}
     <div v-for="category in categories">
       <input
         type="checkbox"
-        v-model="checkedCategories"
-        v-bind:value="category"
+        v-model="categoriesFilter"
+        v-bind:value="category.name"
       />
       {{ category.name }}
     </div>
@@ -74,7 +73,7 @@
     </div> -->
     <div
       v-for="post in orderBy(
-        filterBy(filteredByCategories, titleFilter, 'title'),
+        filterBy(filteredPosts, titleFilter, 'title'),
         sortAttribute,
         -1
       )"
@@ -108,19 +107,21 @@
 
 <script>
 import axios from "axios";
-// import Multiselect from "vue-multiselect";
+import Multiselect from "vue-multiselect";
 import Vue2Filters from "vue2-filters";
 
 export default {
   mixins: [Vue2Filters.mixin],
   components: {
-    // Multiselect,
+    Multiselect,
   },
   data: function() {
     return {
       posts: [],
       categories: [],
       categoriesFilter: [],
+      locationsFilter: [],
+      locations: [],
       values: [],
       sortAttribute: "created_at",
       titleFilter: "",
@@ -155,30 +156,23 @@ export default {
     );
   },
   computed: {
-    filteredPostsByCategories() {
-      return this.getByCategory(this.posts, this.categoriesFilter);
-    },
-    filteredList() {
-      return this.postList.filter((post) => {
-        return post.title.toLowerCase().includes(this.search.toLowerCase());
-      });
-    },
-    filteredByCategories() {
-      if (!this.checkedCategories.length) {
-        return this.posts;
-      } else {
-        return this.posts.filter((post) =>
-          this.checkedCategories
-            .toLowerCase()
-            .includes(post.categories.toLowerCase())
-        );
-      }
+    filteredPosts() {
+      return this.getByFilter(
+        this.posts,
+        this.categoriesFilter,
+        this.locationsFilter
+      );
     },
   },
   methods: {
     indexPosts: function() {
       axios.get("/api/posts").then((response) => {
         console.log(response.data);
+        response.data.forEach((post) => {
+          if (!this.locations.includes(post.location)) {
+            this.locations.push(post.location);
+          }
+        });
         this.posts = response.data;
       });
     },
@@ -191,10 +185,17 @@ export default {
         this.categories = response.data;
       });
     },
-    getByCategory: function(posts, categoriesFilter) {
-      categoriesFilter.forEach((category) => {
-        posts = this.filterBy(posts, category.name);
-      });
+    getByFilter: function(posts, categoriesFilter, locationsFilter) {
+      if (categoriesFilter) {
+        categoriesFilter.forEach((category) => {
+          posts = this.filterBy(posts, category);
+        });
+      }
+      if (locationsFilter) {
+        locationsFilter.forEach((location) => {
+          posts = this.filterBy(posts, location);
+        });
+      }
       return posts;
     },
   },
