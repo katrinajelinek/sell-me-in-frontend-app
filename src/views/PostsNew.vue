@@ -32,6 +32,7 @@
           ref="fileInput"
         />
       </div>
+
       <div class="form-group">
         <div>
           <multiselect
@@ -63,12 +64,75 @@
       </div> -->
       <input type="submit" class="btn btn-primary" value="Submit" />
     </form>
+    <button
+      v-on:click="openWidget"
+      id="upload_widget"
+      class="cloudinary-button"
+    >
+      Upload files
+    </button>
   </div>
 </template>
+
+//
+<script type="text/javascript">
+// var myWidget = cloudinary.createUploadWidget(
+//   {
+//     cloudName: "djka3ehcg",
+//     uploadPreset: "q2upzv8p",
+//   },
+//   (error, result) => {
+//     if (!error && result && result.event === "success") {
+//       console.log("Done! Here is the image info: ", result.info);
+//       this.video = result.info.path;
+//     }
+//   }
+// );
+// myWidget.open();
+
+// document.getElementById("upload_widget").addEventListener(
+//   "click",
+//   function() {
+//     myWidget.open();
+//     console.log("buttons");
+//   },
+//   false
+// );
+
+// var generateSignature = function(callback, params_to_sign) {
+//   $.ajax({
+//     url: "https://localhost:8080/my_generate_signature",
+//     type: "GET",
+//     dataType: "text",
+//     data: { data: params_to_sign },
+//     complete: function() {
+//       console.log("complete");
+//     },
+//     success: function(signature, textStatus, xhr) {
+//       callback(signature);
+//     },
+//     error: function(xhr, status, error) {
+//       console.log(xhr, status, error);
+//     },
+//   });
+// };
+
+// cloudinary.applyUploadWidget(
+//   document.getElementById("upload_widget_opener"),
+//   {
+//     api_key: console.log(env.local.VUE_APP_MY_API_KEY),
+//     cloudName: "djka3ehcg",
+//     uploadSignature: generateSignature,
+//   },
+//   (error, result) => {}
+// );
+//
+</script>
 
 <script>
 import axios from "axios";
 import Multiselect from "vue-multiselect";
+import myWidget from "../router/index.js";
 
 export default {
   components: {
@@ -120,6 +184,9 @@ export default {
         console.log(response.data);
         this.categories = response.data;
       });
+    },
+    openWidget: function() {
+      document.getElementById("upload_widget").onclick = myWidget.open();
     },
   },
 };

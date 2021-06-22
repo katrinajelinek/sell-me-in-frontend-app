@@ -12,7 +12,22 @@ import PostsEdit from "../views/PostsEdit.vue";
 import CategoriesIndex from "../views/CategoriesIndex.vue";
 import CategoriesShow from "../views/CategoriesShow.vue";
 
-Vue.use(VueRouter)
+const myWidget = window.cloudinary.createUploadWidget(
+  {
+    cloudName: "djka3ehcg",
+    uploadPreset: "q2upzv8p",
+  },
+  (error, result) => {
+    if (!error && result && result.event === "success") {
+      console.log("Done! Here is the image info: ", result.info);
+      this.video = result.info.path;
+    }
+    // myWidget.close(true);
+  }
+);
+myWidget.open();
+
+Vue.use(VueRouter);
 
 const routes = [
   {
@@ -70,12 +85,13 @@ const routes = [
     name: "categories-show", 
     component: CategoriesShow
   },
-]
+];
 
 const router = new VueRouter({
   mode: 'history',
   base: process.env.BASE_URL,
   routes
-})
+});
 
+// export {myWidget}; 
 export default router;
