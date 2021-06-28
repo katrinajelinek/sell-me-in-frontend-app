@@ -23,7 +23,7 @@
         <label>Description:</label>
         <input type="text" class="form-control" v-model="description" />
       </div>
-      <div class="form-group">
+      <!-- <div class="form-group">
         <label>Upload your pitch:</label>
         <input
           type="file"
@@ -31,7 +31,7 @@
           v-on:change="setFile($event)"
           ref="fileInput"
         />
-      </div>
+      </div> -->
       <div class="form-group">
         <div>
           <multiselect
@@ -63,6 +63,12 @@
       </div> -->
       <input type="submit" class="btn btn-primary" value="Submit" />
     </form>
+    <div>
+      <button @click="openUploadModal">Upload your Pitch</button>
+    </div>
+    <!-- <div>
+      <img :src="url" />
+    </div> -->
   </div>
 </template>
 
@@ -120,6 +126,22 @@ export default {
         console.log(response.data);
         this.categories = response.data;
       });
+    },
+    openUploadModal() {
+      window.cloudinary
+        .openUploadWidget(
+          {
+            cloud_name: "djka3ehcg",
+            upload_preset: "musnwcbj",
+          },
+          (error, result) => {
+            if (!error && result && result.event === "success") {
+              console.log("Done uploading..: ", result.info);
+              this.video = result.info.url;
+            }
+          }
+        )
+        .open();
     },
   },
 };
