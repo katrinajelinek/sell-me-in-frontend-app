@@ -1,7 +1,13 @@
 <template>
   <div class="users-edit">
+    <h1>Edit your Profile</h1>
+    <div>
+      <button @click="openUploadModal">Choose a new profile picture</button>
+    </div>
+    <div v-if="image">
+      <img :src="`${image}`" type="" width="700" height="500" />
+    </div>
     <form v-on:submit.prevent="updateUser(user)">
-      <h1>Edit your Profile</h1>
       <ul>
         <li class="text-danger" v-for="error in errors" v-bind:key="error">
           {{ error }}
@@ -18,15 +24,6 @@
       <div class="form-group">
         <label>Username:</label>
         <input type="text" class="form-control" v-model="user.username" />
-      </div>
-      <div class="form-group">
-        <label>Change your Picture:</label>
-        <input
-          type="file"
-          class="form-control"
-          v-on:change="setFile($event)"
-          ref="fileInput"
-        />
       </div>
       <div class="form-group">
         <label>Email:</label>
@@ -83,6 +80,7 @@ export default {
     axios.get(`/api/users/${this.$route.params.id}`).then((response) => {
       console.log(response.data);
       this.user = response.data;
+      this.image = response.data.image_url;
     });
   },
   methods: {
@@ -123,6 +121,22 @@ export default {
           this.$router.push("/");
         });
       }
+    },
+    openUploadModal() {
+      window.cloudinary
+        .openUploadWidget(
+          {
+            cloud_name: "djka3ehcg",
+            upload_preset: "musnwcbj",
+          },
+          (error, result) => {
+            if (!error && result && result.event === "success") {
+              console.log("Done uploading..: ", result.info);
+              this.image = result.info.url;
+            }
+          }
+        )
+        .open();
     },
   },
 };

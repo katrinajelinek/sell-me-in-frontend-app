@@ -1,6 +1,16 @@
 <template>
   <div class="users-show">
-    <img :src="`${user.image_url}`" alt="" height="500" width="700" />
+    <div v-if="user.image_url == null">
+      <img
+        src="https://images.unsplash.com/photo-1624916888948-7015aa2b25b5?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80"
+        alt=""
+        height="500"
+        width="700"
+      />
+    </div>
+    <div v-if="user.image_url !== null">
+      <img :src="`${user.image_url}`" alt="" height="500" width="700" />
+    </div>
     <h1>{{ user.username }}</h1>
     <div v-if="$parent.getUserId() == user.id">
       <router-link :to="`/users/edit/${user.id}`"
@@ -19,9 +29,6 @@
       />
       <label>Show already bought posts</label>
     </div>
-    <!-- <button v-on:click="boughtToggle = !boughtToggle">
-      Checkout bought posts
-    </button> -->
     <h2>Posts:</h2>
     <div v-for="post in user.posts">
       <div v-if="post.bought == false">

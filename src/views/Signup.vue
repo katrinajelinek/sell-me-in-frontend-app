@@ -1,7 +1,13 @@
 <template>
   <div class="signup">
+    <h1>Signup</h1>
+    <div>
+      <button @click="openUploadModal">Choose a profile picture</button>
+    </div>
+    <div v-if="image">
+      <img :src="`${image}`" type="" width="700" height="500" />
+    </div>
     <form v-on:submit.prevent="submit()">
-      <h1>Signup</h1>
       <ul>
         <li class="text-danger" v-for="error in errors" v-bind:key="error">
           {{ error }}
@@ -19,7 +25,7 @@
         <label>Username:</label>
         <input type="text" class="form-control" v-model="username" />
       </div>
-      <div class="form-group">
+      <!-- <div class="form-group">
         <label>Upload an Image:</label>
         <input
           type="file"
@@ -27,7 +33,7 @@
           v-on:change="setFile($event)"
           ref="fileInput"
         />
-      </div>
+      </div> -->
       <div class="form-group">
         <label>Email:</label>
         <input type="email" class="form-control" v-model="email" />
@@ -128,6 +134,22 @@ export default {
         .catch((error) => {
           this.errors = error.response.data.errors;
         });
+    },
+    openUploadModal() {
+      window.cloudinary
+        .openUploadWidget(
+          {
+            cloud_name: "djka3ehcg",
+            upload_preset: "musnwcbj",
+          },
+          (error, result) => {
+            if (!error && result && result.event === "success") {
+              console.log("Done uploading..: ", result.info);
+              this.image = result.info.url;
+            }
+          }
+        )
+        .open();
     },
   },
 };
