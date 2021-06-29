@@ -20,6 +20,19 @@
       <router-link to="/posts/new">Create a Post</router-link>
     </div>
     <br />
+    <div v-if="$parent.getUserId() == user.id">
+      <div v-if="termsAndDisclaimerToggle == true">
+        <h4>These are terms and conditions</h4>
+        <h4>This is a disclaimer</h4>
+        <button v-on:click="termsAndDisclaimerToggle = false">Close</button>
+      </div>
+      <div v-if="termsAndDisclaimerToggle == false">
+        <button v-on:click="termsAndDisclaimerToggle = true">
+          click to read terms and conditions agreement
+        </button>
+      </div>
+    </div>
+    <br />
     <div>
       <input
         type="checkbox"
@@ -99,6 +112,7 @@ export default {
         posts: [],
       },
       boughtPostsToggle: "no",
+      termsAndDisclaimerToggle: false,
     };
   },
   created: function() {

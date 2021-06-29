@@ -25,15 +25,6 @@
         <label>Username:</label>
         <input type="text" class="form-control" v-model="username" />
       </div>
-      <!-- <div class="form-group">
-        <label>Upload an Image:</label>
-        <input
-          type="file"
-          class="form-control"
-          v-on:change="setFile($event)"
-          ref="fileInput"
-        />
-      </div> -->
       <div class="form-group">
         <label>Email:</label>
         <input type="email" class="form-control" v-model="email" />
@@ -54,7 +45,7 @@
         <h4>These are terms and conditions</h4>
         <h4>This is a disclaimer</h4>
         <div class="form-group">
-          <label>I have ready and agree to the terms and conditions</label>
+          <label>I have read and agree to the terms and conditions</label>
           <input
             type="checkbox"
             class="form-control"
