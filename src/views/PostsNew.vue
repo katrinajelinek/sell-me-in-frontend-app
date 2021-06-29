@@ -1,14 +1,12 @@
 <template>
   <div class="posts-new">
     <h1>Create Post</h1>
-    <h3>First, upload your video pitch</h3>
     <div>
-      <button @click="openUploadModal">Upload Pitch</button>
+      <button @click="openUploadModal">Upload Video Pitch</button>
     </div>
     <div v-if="video">
       <embed :src="`${video}`" type="" />
     </div>
-    <h3>Now, give us some details</h3>
     <form v-on:submit.prevent="submit()">
       <ul>
         <li class="text-danger" v-for="error in errors" v-bind:key="error">
@@ -31,15 +29,6 @@
         <label>Description:</label>
         <input type="text" class="form-control" v-model="description" />
       </div>
-      <!-- <div class="form-group">
-        <label>Upload your pitch:</label>
-        <input
-          type="file"
-          class="form-control"
-          v-on:change="setFile($event)"
-          ref="fileInput"
-        />
-      </div> -->
       <div class="form-group">
         <div>
           <multiselect

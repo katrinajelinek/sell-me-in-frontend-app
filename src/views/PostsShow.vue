@@ -40,24 +40,26 @@
     </div>
     <div v-if="post.user_id === $parent.getUserId()">
       <div>
-        <button @click="openUploadModal">Upload an image</button>
+        <button @click="openUploadModal">Upload images</button>
       </div>
-      <div v-for="image in images">
-        <img :src="image.image_url" height="500" width="500" />
-        <div v-if="post.user_id === $parent.getUserId()">
-          <button v-on:click="destroyImage(image)">
-            Delete Image
-          </button>
-        </div>
+    </div>
+    <div v-for="image in images">
+      <img :src="image.image_url" height="500" width="500" />
+      <div v-if="post.user_id === $parent.getUserId()">
+        <button v-on:click="destroyImage(image)">
+          Delete Image
+        </button>
       </div>
-      <div v-for="image in imageUrls">
-        <img :src="image" height="500" width="500" />
-        <div v-if="post.user_id === $parent.getUserId()">
-          <button v-on:click="destroyImageUrl(image)">
-            Delete Image
-          </button>
-        </div>
+    </div>
+    <div v-for="image in imageUrls">
+      <img :src="image" height="500" width="500" />
+      <div v-if="post.user_id === $parent.getUserId()">
+        <button v-on:click="destroyImageUrl(image)">
+          Delete Image
+        </button>
       </div>
+    </div>
+    <div v-if="post.user_id === $parent.getUserId()">
       <div v-if="imagesSaveToggle === true">
         <button v-on:click="createImage()">Save Images</button>
       </div>
@@ -152,6 +154,16 @@ export default {
           {
             cloud_name: "djka3ehcg",
             upload_preset: "musnwcbj",
+            sources: [
+              "local",
+              "url",
+              "camera",
+              "google_drive",
+              "dropbox",
+              "instagram",
+              "facebook",
+            ],
+            dropboxAppKey: "2ymhwjldd8r671y",
           },
           (error, result) => {
             if (!error && result && result.event === "success") {
