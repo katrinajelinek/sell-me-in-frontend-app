@@ -1,6 +1,6 @@
 <template>
   <div class="users-show">
-    <img :src="`${user.image_url}`" alt="" />
+    <img :src="`${user.image_url}`" alt="" height="500" width="700" />
     <h1>{{ user.username }}</h1>
     <div v-if="$parent.getUserId() == user.id">
       <router-link :to="`/users/edit/${user.id}`"
@@ -10,9 +10,18 @@
       <router-link to="/posts/new">Create a Post</router-link>
     </div>
     <br />
-    <button v-on:click="boughtToggle = !boughtToggle">
+    <div>
+      <input
+        type="checkbox"
+        v-model="boughtPostsToggle"
+        true-value="yes"
+        false-value="no"
+      />
+      <label>Show already bought posts</label>
+    </div>
+    <!-- <button v-on:click="boughtToggle = !boughtToggle">
       Checkout bought posts
-    </button>
+    </button> -->
     <h2>Posts:</h2>
     <div v-for="post in user.posts">
       <div v-if="post.bought == false">
@@ -39,7 +48,7 @@
         </div>
         <br />
       </div>
-      <div v-if="post.bought == boughtToggle">
+      <div v-if="boughtPostsToggle == 'yes'">
         <div v-if="post.bought == true">
           <embed :src="`${post.video_url}`" type="" />
           <h3>
@@ -82,7 +91,7 @@ export default {
       user: {
         posts: [],
       },
-      boughtToggle: false,
+      boughtPostsToggle: "no",
     };
   },
   created: function() {
