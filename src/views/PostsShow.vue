@@ -38,30 +38,29 @@
         }}</router-link>
       </p>
     </div>
-    <div v-for="image in post.images">
-      <img :src="`${image.image_url}`" />
-      <div v-if="post.user_id === $parent.getUserId()">
-        <button v-on:click="destroyImage(image)">Delete Image</button>
-      </div>
-    </div>
     <div v-if="post.user_id === $parent.getUserId()">
-      <form v-on:submit.prevent="createImage()">
-        <ul>
-          <li class="text-danger" v-for="error in errors" v-bind:key="error">
-            {{ error }}
-          </li>
-        </ul>
-        <div class="form-group">
-          <label>Add Images:</label>
-          <input
-            type="file"
-            class="form-control"
-            v-on:change="setFile($event)"
-            ref="fileInput"
-          />
+      <div>
+        <button @click="openUploadModal">Upload an image</button>
+      </div>
+      <div v-for="image in images">
+        <img :src="image.image_url" height="500" width="500" />
+        <div v-if="post.user_id === $parent.getUserId()">
+          <button v-on:click="destroyImage(image)">
+            Delete Image
+          </button>
         </div>
-        <input type="submit" class="btn btn-primary" value="Add Image" />
-      </form>
+      </div>
+      <div v-for="image in imageUrls">
+        <img :src="image" height="500" width="500" />
+        <div v-if="post.user_id === $parent.getUserId()">
+          <button v-on:click="destroyImageUrl(image)">
+            Delete Image
+          </button>
+        </div>
+      </div>
+      <div v-if="imagesSaveToggle === true">
+        <button v-on:click="createImage()">Save Images</button>
+      </div>
     </div>
   </div>
 </template>
@@ -77,10 +76,11 @@ export default {
         user: {},
       },
       images: [],
-      image: "",
+      imageUrls: [],
       errors: [],
       messageToggle: false,
       message: "",
+      imagesSaveToggle: false,
     };
   },
   created: function() {
@@ -112,19 +112,23 @@ export default {
         });
     },
     createImage: function() {
-      var formData = new FormData();
-      formData.append("post_id", this.post.id);
-      formData.append("image", this.image);
-      axios
-        .post("/api/images", formData)
-        .then((response) => {
-          this.image = "";
-          console.log(response.data);
-          this.images.push(response.data);
-        })
-        .catch((error) => {
-          this.errors = error.response.data.errors;
-        });
+      this.imageUrls.forEach((image) => {
+        var formData = new FormData();
+        formData.append("post_id", this.post.id);
+        formData.append("image", image);
+        axios
+          .post("/api/images", formData)
+          .then((response) => {
+            this.image = "";
+            console.log(response.data);
+            this.images.push(response.data);
+          })
+          .catch((error) => {
+            this.errors = error.response.data.errors;
+          });
+      });
+      this.imageUrls = [];
+      this.imagesSaveToggle = false;
     },
     destroyImage: function(image) {
       if (confirm("Are you sure you want to delete your image?")) {
@@ -134,6 +138,30 @@ export default {
           this.images.splice(index, 1);
         });
       }
+    },
+    destroyImageUrl: function(image) {
+      if (confirm("Are you sure you want to delete your image?")) {
+        var index = this.imageUrls.indexOf(image);
+        this.imageUrls.splice(index, 1);
+        console.log("image destroyed");
+      }
+    },
+    openUploadModal() {
+      window.cloudinary
+        .openUploadWidget(
+          {
+            cloud_name: "djka3ehcg",
+            upload_preset: "musnwcbj",
+          },
+          (error, result) => {
+            if (!error && result && result.event === "success") {
+              console.log("Done uploading..: ", result.info);
+              this.imageUrls.push(result.info.url);
+            }
+          }
+        )
+        .open();
+      this.imagesSaveToggle = true;
     },
   },
 };

@@ -1,7 +1,15 @@
 <template>
   <div class="posts-new">
+    <h1>Create Post</h1>
+    <h3>First, upload your video pitch</h3>
+    <div>
+      <button @click="openUploadModal">Upload Pitch</button>
+    </div>
+    <div v-if="video">
+      <embed :src="`${video}`" type="" />
+    </div>
+    <h3>Now, give us some details</h3>
     <form v-on:submit.prevent="submit()">
-      <h1>Create Post</h1>
       <ul>
         <li class="text-danger" v-for="error in errors" v-bind:key="error">
           {{ error }}
@@ -63,12 +71,6 @@
       </div> -->
       <input type="submit" class="btn btn-primary" value="Submit" />
     </form>
-    <div>
-      <button @click="openUploadModal">Upload your Pitch</button>
-    </div>
-    <!-- <div>
-      <img :src="url" />
-    </div> -->
   </div>
 </template>
 
