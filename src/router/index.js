@@ -12,7 +12,7 @@ import PostsEdit from "../views/PostsEdit.vue";
 import CategoriesIndex from "../views/CategoriesIndex.vue";
 import CategoriesShow from "../views/CategoriesShow.vue";
 
-Vue.use(VueRouter)
+Vue.use(VueRouter);
 
 const routes = [
   {
@@ -70,12 +70,12 @@ const routes = [
     name: "categories-show", 
     component: CategoriesShow
   },
-]
+];
 
 const router = new VueRouter({
   mode: 'history',
   base: process.env.BASE_URL,
   routes
-})
+});
 
 export default router;
