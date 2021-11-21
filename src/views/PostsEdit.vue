@@ -1,14 +1,157 @@
 <template>
   <div class="posts-edit">
-    <h1>Edit Media</h1>
-    <br />
-    <embed :src="videoUrl" type="" />
-    <div v-if="post.user_id === $parent.getUserId()">
-      <div>
-        <button @click="openVideoUploadModal">Change your video pitch</button>
-      </div>
+    <div id="body" class="body-wrapper version1 up-scroll">
+      <!-- LIGHT SECTION -->
+      <section class="lightSection clearfix pageHeader">
+        <div class="container">
+          <div class="row">
+            <div class="col-md-6">
+              <div class="page-title">
+                <h2>Edit your Post</h2>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <ol class="breadcrumb float-right">
+                <li>
+                  <a href="index.html">Home</a>
+                </li>
+                <li class="active">Create</li>
+              </ol>
+            </div>
+          </div>
+        </div>
+      </section>
+      <!-- MAIN CONTENT SECTION -->
+      <section class="mainContent clearfix signUp">
+        <div class="container">
+          <div class="row justify-content-center">
+            <div class="col-md-6">
+              <div class="panel panel-default">
+                <div class="panel-heading"><h3>Post</h3></div>
+                <div class="panel-body">
+                  <div v-if="post.user_id === $parent.getUserId()">
+                    <div class="row justify-content-center">
+                      <embed :src="videoUrl" type="" />
+                    </div>
+                    <br />
+                    <div>
+                      <button
+                        class="btn btn-primary btn-block"
+                        @click="openVideoUploadModal"
+                      >
+                        Change your video pitch
+                      </button>
+                    </div>
+                  </div>
+                  <br />
+                  <form
+                    action=""
+                    method="PUT"
+                    role="form"
+                    v-on:submit.prevent="updatePost(post)"
+                  >
+                    <ul>
+                      <li
+                        class="text-danger"
+                        v-for="error in errors"
+                        v-bind:key="error"
+                      >
+                        {{ error }}
+                      </li>
+                    </ul>
+                    <div class="form-group">
+                      <label for="">Title</label>
+                      <input
+                        type="text"
+                        class="form-control"
+                        id="title"
+                        v-model="post.title"
+                      />
+                    </div>
+                    <div class="form-group">
+                      <label for="">Price</label>
+                      <input
+                        type="text"
+                        class="form-control"
+                        id="price"
+                        v-model="post.price"
+                      />
+                    </div>
+                    <div class="form-group">
+                      <label for="">Description</label>
+                      <input
+                        type="text"
+                        class="form-control"
+                        id="description"
+                        v-model="post.description"
+                      />
+                    </div>
+                    <div class="form-group">
+                      <div>
+                        <multiselect
+                          v-model="values"
+                          :options="categories"
+                          :multiple="true"
+                          :close-on-select="false"
+                          :clear-on-select="false"
+                          :preserve-search="true"
+                          placeholder="Categories"
+                          label="name"
+                          track-by="name"
+                          :preselect-first="true"
+                        >
+                          <template
+                            slot="selection"
+                            slot-scope="{ values, isOpen }"
+                            ><span
+                              class="multiselect__single"
+                              v-if="values.length &amp;&amp; !isOpen"
+                              >{{ values.length }} categories selected</span
+                            ></template
+                          >
+                        </multiselect>
+                      </div>
+                    </div>
+                    <button
+                      type="submit"
+                      class="btn btn-primary btn-block"
+                      value="submit"
+                    >
+                      Submit
+                    </button>
+                  </form>
+                  <br />
+                  <div>
+                    <button
+                      class="btn btn-primary btn-block"
+                      v-on:click="destroyPost()"
+                    >
+                      Delete your post
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
     </div>
-    <div v-if="post.user_id === $parent.getUserId()">
+    <!-- <h1>Edit Media</h1> -->
+    <!-- <div>
+      <div>
+        <select v-model="state">
+          <option disabled value="">Please your state</option>
+          <option v-for="state in states">{{ state }}</option>
+        </select>
+      </div>
+      <div>
+        <label>City:</label>
+        <input type="text" v-model="city" />
+      </div>
+      <button v-on:click="validateLocation()">Validate Location</button>
+    </div> -->
+
+    <!-- <div v-if="post.user_id === $parent.getUserId()">
       <div>
         <button @click="openImageUploadModal">Upload images</button>
       </div>
@@ -34,56 +177,7 @@
         <button v-on:click="createImage()">Save Images</button>
       </div>
     </div>
-    <form v-on:submit.prevent="updatePost(post)">
-      <h1>Edit Details</h1>
-      <ul>
-        <li class="text-danger" v-for="error in errors" v-bind:key="error">
-          {{ error }}
-        </li>
-      </ul>
-      <div class="form-group">
-        <label>Title:</label>
-        <input type="text" class="form-control" v-model="post.title" />
-      </div>
-      <div class="form-group">
-        <label>Price:</label>
-        <input type="text" class="form-control" v-model="post.price" />
-      </div>
-      <div class="form-group">
-        <label>Location:</label>
-        <input type="text" class="form-control" v-model="post.location" />
-      </div>
-      <div class="form-group">
-        <label>Description:</label>
-        <input type="text" class="form-control" v-model="post.description" />
-      </div>
-      <div class="form-group">
-        <div>
-          <multiselect
-            v-model="values"
-            :options="categories"
-            :multiple="true"
-            :close-on-select="false"
-            :clear-on-select="false"
-            :preserve-search="true"
-            placeholder="Categories"
-            label="name"
-            track-by="name"
-            :preselect-first="true"
-          >
-            <template slot="selection" slot-scope="{ values, isOpen }"
-              ><span
-                class="multiselect__single"
-                v-if="values.length &amp;&amp; !isOpen"
-                >{{ values.length }} categories selected</span
-              ></template
-            >
-          </multiselect>
-        </div>
-      </div>
-      <input type="submit" class="btn btn-primary" value="Submit" />
-    </form>
-    <button v-on:click="destroyPost()">Delete your post</button>
+    <button v-on:click="destroyPost()">Delete your post</button> -->
   </div>
 </template>
 

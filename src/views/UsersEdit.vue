@@ -1,63 +1,192 @@
 <template>
   <div class="users-edit">
-    <h1>Edit your Profile</h1>
-    <div>
-      <button @click="openUploadModal">Choose a new profile picture</button>
-    </div>
-    <div v-if="image">
-      <img :src="`${image}`" type="" width="700" height="500" />
-    </div>
-    <form v-on:submit.prevent="updateUser(user)">
-      <ul>
-        <li class="text-danger" v-for="error in errors" v-bind:key="error">
-          {{ error }}
-        </li>
-      </ul>
-      <div class="form-group">
-        <label>First Name:</label>
-        <input type="text" class="form-control" v-model="user.first_name" />
+    <!-- LIGHT SECTION -->
+    <section class="lightSection clearfix pageHeader">
+      <div class="container">
+        <div class="row">
+          <div class="col-md-6">
+            <div class="page-title">
+              <h2>EDIT YOUR PROFILE</h2>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <ol class="breadcrumb float-right">
+              <li>
+                <router-link to="/">Home</router-link>
+              </li>
+              <li class="active">PROFILE</li>
+            </ol>
+          </div>
+        </div>
       </div>
-      <div class="form-group">
-        <label>Last Name:</label>
-        <input type="text" class="form-control" v-model="user.last_name" />
+    </section>
+
+    <!-- MAIN CONTENT SECTION -->
+    <section class="mainContent clearfix userProfile">
+      <div class="container">
+        <div class="row">
+          <div class="col-md-12">
+            <div class="innerWrapper profile">
+              <div class="orderBox">
+                <router-link :to="`/users/${user.id}`">
+                  <h2>profile</h2></router-link
+                >
+              </div>
+              <div class="row">
+                <div class="col-md-4 col-lg-3 col-xl-2 col-12">
+                  <div class="thumbnail">
+                    <div v-if="image">
+                      <img :src="`${image}`" alt="" />
+                    </div>
+                    <div v-if="image == null">
+                      <img :src="`${user.image_url}`" alt="" />
+                    </div>
+
+                    <div class="caption">
+                      <button
+                        class="btn btn-primary btn-block"
+                        role="button"
+                        v-on:click="openUploadModal()"
+                      >
+                        Change Avatar
+                      </button>
+                    </div>
+                  </div>
+                </div>
+
+                <div
+                  class="col-md-8 col-lg-9 col-xl-10 col-12"
+                  v-if="$parent.getUserId() == user.id"
+                >
+                  <form
+                    class="form-horizontal"
+                    v-on:submit.prevent="updateUser(user)"
+                  >
+                    <ul>
+                      <li
+                        class="text-danger"
+                        v-for="error in errors"
+                        v-bind:key="error"
+                      >
+                        {{ error }}
+                      </li>
+                    </ul>
+                    <div class="form-group row">
+                      <label for="" class="col-md-3 control-label"
+                        >First Name</label
+                      >
+                      <div class="col-md-7">
+                        <input
+                          type="text"
+                          class="form-control"
+                          id="first_name"
+                          v-model="user.first_name"
+                          :placeholder="`${user.first_name}`"
+                        />
+                      </div>
+                    </div>
+                    <div class="form-group row">
+                      <label for="" class="col-md-3 control-label"
+                        >Last Name</label
+                      >
+                      <div class="col-md-7">
+                        <input
+                          type="text"
+                          class="form-control"
+                          id="last_name"
+                          v-model="user.last_name"
+                          :placeholder="`${user.last_name}`"
+                        />
+                      </div>
+                    </div>
+                    <div class="form-group row">
+                      <label for="" class="col-md-3 control-label"
+                        >Username</label
+                      >
+                      <div class="col-md-9">
+                        <input
+                          type="text"
+                          class="form-control"
+                          id="username"
+                          v-model="user.username"
+                          :placeholder="`${user.username}`"
+                        />
+                      </div>
+                    </div>
+                    <div class="form-group row">
+                      <label for="" class="col-md-3 control-label"
+                        >Email Address</label
+                      >
+                      <div class="col-md-9">
+                        <input
+                          type="email"
+                          class="form-control"
+                          id="email"
+                          v-model="user.email"
+                          :placeholder="`${user.email}`"
+                        />
+                      </div>
+                    </div>
+                    <div class="form-group row">
+                      <label for="" class="col-md-3 control-label"
+                        >Password</label
+                      >
+                      <div class="col-md-9">
+                        <input
+                          type="password"
+                          class="form-control"
+                          id="password"
+                          v-model="oldPassword"
+                          placeholder="***********"
+                        />
+                      </div>
+                    </div>
+                    <div class="form-group row">
+                      <label for="" class="col-md-3 control-label"
+                        >New Password</label
+                      >
+                      <div class="col-md-9">
+                        <input
+                          type="password"
+                          class="form-control"
+                          id=""
+                          v-model="password"
+                          placeholder="***********"
+                        />
+                      </div>
+                    </div>
+                    <div class="form-group row">
+                      <label for="" class="col-md-3 control-label"
+                        >Confirm Password</label
+                      >
+                      <div class="col-md-9">
+                        <input
+                          type="password"
+                          class="form-control"
+                          id=""
+                          v-model="passwordConfirmation"
+                          placeholder="***********"
+                        />
+                      </div>
+                    </div>
+                    <div class="form-group row">
+                      <div class=" col-md-12 ">
+                        <button
+                          type="submit"
+                          class="btn btn-primary float-right"
+                        >
+                          SAVE INFO
+                        </button>
+                      </div>
+                    </div>
+                  </form>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
-      <div class="form-group">
-        <label>Username:</label>
-        <input type="text" class="form-control" v-model="user.username" />
-      </div>
-      <div class="form-group">
-        <label>Email:</label>
-        <input type="email" class="form-control" v-model="user.email" />
-      </div>
-      <button v-on:click="passwordUpdateToggle = !passwordUpdateToggle">
-        Change Password
-      </button>
-      <button type="submit">
-        Update
-      </button>
-      <button v-on:click="destroyUser()">Delete Profile</button>
-    </form>
-    <form v-if="passwordUpdateToggle">
-      <div class="form-group">
-        <label>Old Password:</label>
-        <input type="password" class="form-control" v-model="oldPassword" />
-      </div>
-      <div class="form-group">
-        <label>New Password:</label>
-        <input type="password" class="form-control" v-model="password" />
-      </div>
-      <div class="form-group">
-        <label>Confirm Password:</label>
-        <input
-          type="password"
-          class="form-control"
-          v-model="passwordConfirmation"
-        />
-      </div>
-      <button v-on:click="updateUser()">
-        Update Password
-      </button>
-    </form>
+    </section>
   </div>
 </template>
 

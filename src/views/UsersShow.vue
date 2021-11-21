@@ -1,17 +1,140 @@
 <template>
   <div class="users-show">
-    <div v-if="user.image_url == null">
-      <img
-        src="https://images.unsplash.com/photo-1624916888948-7015aa2b25b5?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80"
-        alt=""
-        height="500"
-        width="700"
-      />
-    </div>
-    <div v-if="user.image_url !== null">
-      <img :src="`${user.image_url}`" alt="" height="500" width="700" />
-    </div>
-    <h1>{{ user.username }}</h1>
+    <!-- <div id="body" class="body-wrapper version1 up-scroll"> -->
+    <!-- LIGHT SECTION -->
+    <section class="lightSection clearfix pageHeader">
+      <div class="container">
+        <div class="row">
+          <div class="col-md-6">
+            <div class="page-title">
+              <h2>{{ user.username }}'S POSTS</h2>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <ol class="breadcrumb float-right">
+              <li>
+                <router-link to="/">Home</router-link>
+              </li>
+              <li class="active">PROFILE</li>
+            </ol>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- MAIN CONTENT SECTION -->
+    <section class="mainContent clearfix productsContent">
+      <div class="container">
+        <div class="row">
+          <div class="col-lg-3 col-md-4 sideBar">
+            <div class="panel panel-default filterNormal">
+              <div class="panel-heading">{{ user.username }}</div>
+              <div class="panel-body">
+                <img height="175px" :src="`${user.image_url}`" alt="" />
+              </div>
+            </div>
+            <div class="panel panel-default filterNormal">
+              <div class="panel-heading">Product Categories</div>
+              <div class="panel-body">
+                <ul class="list-unstyled clearfix">
+                  <li v-for="category in categories">
+                    <router-link :to="`/categories/${category.id}`">{{
+                      category.name
+                    }}</router-link>
+                  </li>
+                </ul>
+              </div>
+            </div>
+            <div class="panel panel-default priceRange">
+              <div class="panel-heading">Filter by Price</div>
+              <div class="panel-body clearfix">
+                <div class="price-slider-inner">
+                  <span class="amount-wrapper">
+                    Price:
+                    <input type="text" id="price-amount-1" readonly />
+                    <strong>-</strong>
+                    <input type="text" id="price-amount-2" readonly />
+                  </span>
+                  <div id="price-range"></div>
+                </div>
+                <input class="btn-default" type="submit" value="Filter" />
+                <!-- <span class="priceLabel">Price: <strong>$12 - $30</strong></span> -->
+              </div>
+            </div>
+          </div>
+          <div class="col-lg-9 col-md-8">
+            <div class="row">
+              <div class="col-md-6 col-lg-4" v-for="post in user.posts">
+                <div v-if="post.bought == false">
+                  <div class="productBox">
+                    <div class="productImage clearfix">
+                      <iframe
+                        :src="`${post.video_url}`"
+                        frameborder="0"
+                        webkitallowfullscreen
+                        mozallowfullscreen
+                        allowfullscreen
+                      ></iframe>
+                    </div>
+                    <div class="productCaption clearfix">
+                      <div v-if="$parent.getUserId() == post.user_id">
+                        <button
+                          v-on:click="updatePost(post)"
+                          class="btn btn-info btn-rounded btn-sm"
+                        >
+                          Mark post as bought
+                        </button>
+                        <br />
+                        <br />
+                      </div>
+                      <h4 class="media-heading">
+                        <router-link :to="`/posts/${post.id}`">{{
+                          post.title
+                        }}</router-link>
+                      </h4>
+                      <p>
+                        {{ post.description }}
+                      </p>
+                      <p>{{ post.location }}</p>
+                      <h3>${{ post.price }}</h3>
+                    </div>
+                  </div>
+                </div>
+                <div v-if="boughtPostsToggle == 'yes'">
+                  <div v-if="post.bought">
+                    <div class="productBox">
+                      <div class="productImage clearfix">
+                        <iframe
+                          :src="`${post.video_url}`"
+                          frameborder="0"
+                          webkitallowfullscreen
+                          mozallowfullscreen
+                          allowfullscreen
+                        ></iframe>
+                      </div>
+                      <div class="productCaption clearfix">
+                        <h4 class="media-heading">
+                          <router-link :to="`/posts/${post.id}`">{{
+                            post.title
+                          }}</router-link>
+                        </h4>
+                        <p>
+                          {{ post.description }}
+                        </p>
+                        <p>{{ post.location }}</p>
+                        <h3>${{ post.price }}</h3>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- </div> -->
     <div v-if="$parent.getUserId() == user.id">
       <router-link :to="`/users/edit/${user.id}`"
         >Edit your Profile</router-link
@@ -19,20 +142,6 @@
       <br />
       <router-link to="/posts/new">Create a Post</router-link>
     </div>
-    <br />
-    <div v-if="$parent.getUserId() == user.id">
-      <div v-if="termsAndDisclaimerToggle == true">
-        <h4>These are terms and conditions</h4>
-        <h4>This is a disclaimer</h4>
-        <button v-on:click="termsAndDisclaimerToggle = false">Close</button>
-      </div>
-      <div v-if="termsAndDisclaimerToggle == false">
-        <button v-on:click="termsAndDisclaimerToggle = true">
-          click to read terms and conditions agreement
-        </button>
-      </div>
-    </div>
-    <br />
     <div>
       <input
         type="checkbox"
@@ -41,62 +150,6 @@
         false-value="no"
       />
       <label>Show already bought posts</label>
-    </div>
-    <h2>Posts:</h2>
-    <div v-for="post in user.posts">
-      <div v-if="post.bought == false">
-        <embed :src="`${post.video_url}`" type="" />
-        <h3>
-          <router-link :to="`/posts/${post.id}`">{{ post.title }}</router-link>
-        </h3>
-        <div v-if="$parent.getUserId() == post.user_id">
-          <router-link :to="`/posts/edit/${post.id}`"
-            >Edit your Post</router-link
-          >
-        </div>
-        <p>Price: {{ post.price }}</p>
-        <p>Location: {{ post.location }}</p>
-        <p>Description: {{ post.description }}</p>
-        <h5>Categories:</h5>
-        <div v-for="category in post.categories">
-          <p>{{ category.name }}</p>
-        </div>
-        <div v-if="$parent.getUserId() == user.id">
-          <div v-if="post.bought == false">
-            <button v-on:click="updatePost(post)">Mark post as bought</button>
-          </div>
-        </div>
-        <br />
-      </div>
-      <div v-if="boughtPostsToggle == 'yes'">
-        <div v-if="post.bought == true">
-          <embed :src="`${post.video_url}`" type="" />
-          <h3>
-            <router-link :to="`/posts/${post.id}`">{{
-              post.title
-            }}</router-link>
-          </h3>
-          <h4>This has been bought</h4>
-          <div v-if="$parent.getUserId() == post.user_id">
-            <router-link :to="`/posts/edit/${post.id}`"
-              >Edit your Post</router-link
-            >
-          </div>
-          <p>Price: {{ post.price }}</p>
-          <p>Location: {{ post.location }}</p>
-          <p>Description: {{ post.description }}</p>
-          <h5>Categories:</h5>
-          <div v-for="category in post.categories">
-            <p>{{ category.name }}</p>
-          </div>
-          <div v-if="$parent.getUserId() == user.id">
-            <div v-if="post.bought == false">
-              <button v-on:click="updatePost(post)">Mark post as bought</button>
-            </div>
-          </div>
-          <br />
-        </div>
-      </div>
     </div>
   </div>
 </template>
@@ -113,16 +166,24 @@ export default {
       },
       boughtPostsToggle: "no",
       termsAndDisclaimerToggle: false,
+      categories: [],
     };
   },
   created: function() {
     this.showUser();
+    this.indexCategories();
   },
   methods: {
     showUser: function() {
       axios.get(`/api/users/${this.$route.params.id}`).then((response) => {
         console.log(response.data);
         this.user = response.data;
+      });
+    },
+    indexCategories: function() {
+      axios.get("/api/categories").then((response) => {
+        console.log(response.data);
+        this.categories = response.data;
       });
     },
     updatePost: function(post) {
