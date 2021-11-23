@@ -31,6 +31,22 @@
               <div class="panel-heading">{{ user.username }}</div>
               <div class="panel-body">
                 <img height="175px" :src="`${user.image_url}`" alt="" />
+                <div class="form-check">
+                  <input
+                    id="boughtPostsToggle"
+                    type="checkbox"
+                    class="checkbox-custom form-check-input"
+                    checked="false"
+                    v-model="boughtPostsToggle"
+                    true-value="yes"
+                    false-value="no"
+                  />
+                  <label
+                    for="checkbox-1"
+                    class="checkbox-custom-label form-check-label"
+                    >Show already bought posts</label
+                  >
+                </div>
               </div>
             </div>
             <div class="panel panel-default filterNormal">
@@ -64,6 +80,9 @@
           </div>
           <div class="col-lg-9 col-md-8">
             <div class="row">
+              <div v-if="user.posts.length == 0" class="page-title">
+                <h2>This seller hasn't created any posts yet</h2>
+              </div>
               <div class="col-md-6 col-lg-4" v-for="post in user.posts">
                 <div v-if="post.bought == false">
                   <div class="productBox">
@@ -142,7 +161,7 @@
       <br />
       <router-link to="/posts/new">Create a Post</router-link>
     </div>
-    <div>
+    <!-- <div>
       <input
         type="checkbox"
         v-model="boughtPostsToggle"
@@ -150,7 +169,7 @@
         false-value="no"
       />
       <label>Show already bought posts</label>
-    </div>
+    </div> -->
   </div>
 </template>
 

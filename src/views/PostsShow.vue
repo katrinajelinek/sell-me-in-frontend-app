@@ -253,7 +253,7 @@
                             >Contact Seller</a
                           >
                         </li>
-                        <li class="nav-item">
+                        <!-- <li class="nav-item">
                           <a
                             class="nav-link"
                             data-toggle="tab"
@@ -269,7 +269,7 @@
                             href="#OurShipping"
                             >shipping</a
                           >
-                        </li>
+                        </li> -->
                       </ul>
                       <div class="tab-content">
                         <div id="OurDetails" class="tab-pane fade show active">

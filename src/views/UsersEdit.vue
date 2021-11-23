@@ -51,6 +51,15 @@
                         Change Avatar
                       </button>
                     </div>
+                    <div class="caption">
+                      <button
+                        class="btn btn-warning btn-block"
+                        role="button"
+                        v-on:click="destroyUser()"
+                      >
+                        Delete Profile
+                      </button>
+                    </div>
                   </div>
                 </div>
 

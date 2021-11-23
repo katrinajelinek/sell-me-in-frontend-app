@@ -20,7 +20,7 @@
                           alt="https://images.unsplash.com/photo-1624916888948-7015aa2b25b5?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80"
                         />
                       </div>
-                      <div v-if="image != null">
+                      <div v-if="image == ''">
                         <img
                           src="https://images.unsplash.com/photo-1624916888948-7015aa2b25b5?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80"
                           alt=""
@@ -43,7 +43,7 @@
                       class="form-horizontal"
                       v-on:submit.prevent="submit()"
                     >
-                      <div v-if="errors.length > 0" class="form-group row">
+                      <div v-if="errors" class="form-group row">
                         <label for="" class="col-md-3 control-label"></label>
                         <div class="col-md-7">
                           <ul>
