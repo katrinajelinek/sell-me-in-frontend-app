@@ -33,7 +33,7 @@
                 </div>
                 <div class="row">
                   <div class="col-md-4 col-lg-3 col-xl-2 col-12">
-                    <div class="thumbnail">
+                    <div class="thumbnail" v-if="video">
                       <iframe
                         :src="`${video}`"
                         frameborder="0"
@@ -41,17 +41,37 @@
                         mozallowfullscreen
                         allowfullscreen
                       ></iframe>
-                      <div class="caption">
-                        <button
-                          class="btn btn-primary btn-block"
-                          role="button"
-                          v-on:click="openUploadModal()"
-                        >
-                          Upload Video
-                        </button>
-                      </div>
+                    </div>
+                    <div class="caption">
+                      <button
+                        class="btn btn-primary btn-block"
+                        role="button"
+                        v-on:click="openUploadModal()"
+                      >
+                        Upload Video
+                      </button>
+                    </div>
+                    <br />
+                    <div v-if="imagesSaveToggle === false" class="caption">
+                      <button
+                        class="btn btn-primary btn-block"
+                        role="button"
+                        v-on:click="openImageUploadModal()"
+                      >
+                        Add Images
+                      </button>
                     </div>
                   </div>
+                  <div v-for="image in imageUrls">
+                    <img :src="image" height="500" width="500" />
+                    <button
+                      v-on:click="destroyImageUrl(image)"
+                      class="btn btn-primary btn-block"
+                    >
+                      Delete Image
+                    </button>
+                  </div>
+
                   <div class="col-md-8 col-lg-9 col-xl-10 col-12">
                     <form
                       class="form-horizontal"
@@ -198,12 +218,15 @@ export default {
   },
   data: function() {
     return {
+      imagesSaveToggle: false,
       title: "",
       price: "",
       location: "",
       description: "",
       video: "",
       imageUrl: "",
+      post: {},
+      imageUrls: [],
       errors: [],
       values: [],
       categories: [],
@@ -279,6 +302,7 @@ export default {
       formData.append("price", this.price);
       formData.append("location", this.location);
       formData.append("description", this.description);
+      formData.append("image_urls", JSON.stringify(this.imageUrls));
       formData.append("video", this.video);
       formData.append("category_ids", JSON.stringify(categoryIds));
       axios
@@ -307,7 +331,7 @@ export default {
           (error, result) => {
             if (!error && result && result.event === "success") {
               console.log("Done uploading..: ", result.info);
-              this.video = result.info.url;
+              this.video = result.info.secure_url;
             }
           }
         )
@@ -324,6 +348,40 @@ export default {
           console.log(response.data);
           this.location = `${response.data[0]["city_states"][0]["city"]}, ${response.data[0]["city_states"][0]["state_abbreviation"]}`;
         });
+    },
+    destroyImageUrl: function(image) {
+      if (confirm("Are you sure you want to delete your image?")) {
+        var index = this.imageUrls.indexOf(image);
+        this.imageUrls.splice(index, 1);
+        console.log("image destroyed");
+      }
+    },
+    openImageUploadModal() {
+      window.cloudinary
+        .openUploadWidget(
+          {
+            cloud_name: "djka3ehcg",
+            upload_preset: "musnwcbj",
+            sources: [
+              "local",
+              "url",
+              "camera",
+              "google_drive",
+              "dropbox",
+              "instagram",
+              "facebook",
+            ],
+            dropboxAppKey: "2ymhwjldd8r671y",
+          },
+          (error, result) => {
+            if (!error && result && result.event === "success") {
+              console.log("Done uploading..: ", result.info);
+              this.imageUrls.push(result.info.url);
+            }
+          }
+        )
+        .open();
+      this.imagesSaveToggle = true;
     },
   },
 };

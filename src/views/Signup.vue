@@ -313,36 +313,6 @@
         </div>
       </section>
     </div>
-
-    <!-- <form>
-      <div v-if="termsAndDisclaimerToggle == true">
-        <h4>These are terms and conditions</h4>
-        <h4>This is a disclaimer</h4>
-        <div class="form-group">
-          <label>I have read and agree to the terms and conditions</label>
-          <input
-            type="checkbox"
-            class="form-control"
-            v-model="termsAndConditionsAgreement"
-            checked="false"
-          />
-        </div>
-        <div class="form-group">
-          <label>I have ready and agree to the SellMeIn disclaimer</label>
-          <input
-            type="checkbox"
-            class="form-control"
-            v-model="disclaimerAgreement"
-            checked="false"
-          />
-        </div>
-      </div>
-      <div v-if="termsAndDisclaimerToggle == false">
-        <button v-on:click="termsAndDisclaimerToggle = true">
-          click to read terms and conditions agreement
-        </button>
-      </div>
-    </form> -->
   </div>
 </template>
 

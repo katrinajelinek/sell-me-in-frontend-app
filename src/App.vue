@@ -189,7 +189,7 @@
                     >
                   </li>
                   <!-- Profile button -->
-                  <li class="nav-item dropdown  active ">
+                  <li class="nav-item dropdown  active " v-if="isLoggedIn()">
                     <router-link
                       href="javascript:void(0)"
                       class="dropdown-toggle nav-link"
@@ -199,6 +199,19 @@
                       aria-expanded="false"
                       :to="`/users/${getUserId()}`"
                       >Profile</router-link
+                    >
+                  </li>
+                  <!-- New Post -->
+                  <li class="nav-item dropdown  active " v-if="isLoggedIn()">
+                    <router-link
+                      href="javascript:void(0)"
+                      class="dropdown-toggle nav-link"
+                      data-toggle="dropdown"
+                      role="button"
+                      aria-haspopup="true"
+                      aria-expanded="false"
+                      to="/posts/new"
+                      >New Post</router-link
                     >
                   </li>
                 </ul>

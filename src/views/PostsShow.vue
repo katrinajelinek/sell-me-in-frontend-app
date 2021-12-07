@@ -153,81 +153,19 @@
                     <router-link :to="`/users/${post.user_id}`">
                       <h3>{{ post.user.username }}</h3></router-link
                     >
-
-                    <div class="tabArea d-none">
-                      <ul class="nav nav-tabs bar-tabs">
-                        <li class="nav-item">
-                          <a
-                            class="nav-link active"
-                            data-toggle="tab"
-                            href="#details"
-                            >details</a
-                          >
-                        </li>
-                        <li class="nav-item">
-                          <a
-                            class="nav-link"
-                            data-toggle="tab"
-                            href="#about-art"
-                            >about art</a
-                          >
-                        </li>
-                        <li class="nav-item">
-                          <a class="nav-link" data-toggle="tab" href="#sizing"
-                            >sizing</a
-                          >
-                        </li>
-                        <li class="nav-item">
-                          <a class="nav-link" data-toggle="tab" href="#shipping"
-                            >shipping</a
-                          >
-                        </li>
-                      </ul>
-                      <div class="tab-content">
-                        <div id="details" class="tab-pane fade show active">
-                          <p>
-                            LContrary to popular belief, Lorem Ipsum is not
-                            simply random text. It has roots in a piece of
-                            classical Latin liter ature from 45 BC, making it
-                            over 2000 years old. Richard McClintock, a Latin
-                            professor at Hampden-Sydney College in Virginia.
-                          </p>
-                          <ul class="list-unstyled">
-                            <li>Black, Crew Neck</li>
-                            <li>75% Cotton, 25% Rayon</li>
-                            <li>Waterbased Ink</li>
-                            <li>Wash Cold, dry low</li>
-                          </ul>
-                        </div>
-                        <div id="about-art" class="tab-pane fade">
-                          <p>
-                            Nulla facilisi. Mauris efficitur, massa et iaculis
-                            accumsan, mauris velit ultrices purus, quis
-                            condimentum nibh dolor ut tortor. Donec egestas
-                            tortor quis mattis gravida. Ut efficitur elit vitae
-                            dignissim volutpat.
-                          </p>
-                        </div>
-                        <div id="sizing" class="tab-pane fade">
-                          <p>
-                            Praesent dui felis, gravida a auctor at, facilisis
-                            commodo ipsum. Cras eu faucibus justo. Nullam varius
-                            cursus nisi, sed elementum sem sagittis at. Nulla
-                            tellus massa, vestibulum a commodo facilisis,
-                            pulvinar convallis nunc.
-                          </p>
-                        </div>
-                        <div id="shipping" class="tab-pane fade">
-                          <p>
-                            Mauris lobortis augue ex, ut faucibus nisi mollis
-                            ac. Sed volutpat scelerisque ex ut ullamcorper. Cras
-                            at velit quis sapien dapibus laoreet a id odio. Sed
-                            sit amet accumsan ante, eu congue metus. Aenean eros
-                            tortor, cursus quis feugiat sed, vestibulum vel
-                            purus.
-                          </p>
-                        </div>
-                      </div>
+                    <div
+                      class="caption"
+                      v-if="$parent.getUserId() == post.user_id"
+                    >
+                    <router-link :to="`/posts/edit/${post.id}`">
+                    <button
+                        class="btn btn-primary float-left"
+                        role="button"
+                      >
+                        Edit Post
+                      </button>
+                      </router-link>
+                      
                     </div>
                   </div>
                 </div>

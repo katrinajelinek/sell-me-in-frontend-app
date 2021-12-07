@@ -37,11 +37,47 @@
                     <div>
                       <button
                         class="btn btn-primary btn-block"
-                        @click="openVideoUploadModal"
+                        v-on:click="openVideoUploadModal()"
                       >
                         Change your video pitch
                       </button>
                     </div>
+                  </div>
+                  <br />
+                  <div
+                    class="row justify-content-center"
+                    v-for="image in post.images"
+                  >
+                    <img
+                      :src="image.image_url"
+                      type=""
+                      height="400"
+                      width="400"
+                    />
+                    <button
+                      v-on:click="destroyImage(image)"
+                      class="btn btn-primary btn-block"
+                    >
+                      Delete Image
+                    </button>
+                  </div>
+                  <div v-for="image in imageUrls">
+                    <img :src="image" type="" height="400" width="400" />
+                    <button
+                      v-on:click="destroyImageUrl(image)"
+                      class="btn btn-primary btn-block"
+                    >
+                      Delete Image
+                    </button>
+                  </div>
+                  <br />
+                  <div>
+                    <button
+                      class="btn btn-primary btn-block"
+                      v-on:click="openImageUploadModal()"
+                    >
+                      Upload more images
+                    </button>
                   </div>
                   <br />
                   <form
@@ -321,6 +357,7 @@ export default {
       formData.append("price", post.price);
       formData.append("location", post.location);
       formData.append("description", post.description);
+      formData.append("image_urls", JSON.stringify(this.imageUrls));
       formData.append("video", this.videoUrl);
       formData.append("category_ids", JSON.stringify(categoryIds));
       axios
