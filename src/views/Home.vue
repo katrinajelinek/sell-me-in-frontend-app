@@ -58,15 +58,24 @@
             <div class="col-lg-9 col-md-8">
               <div class="row filterArea">
                 <div class="col-6">
-                  <select name="guiest_id1" id="guiest_id1" class="select-drop">
+                  <div>
+                    <input
+                      type="text"
+                      id="search-items"
+                      v-model="search"
+                      placeholder="Search..."
+                    />
+                  </div>
+                  <!-- <select name="guiest_id1" id="guiest_id1" class="select-drop">
                     <option value="0">Default sorting</option>
                     <option value="1">Sort by popularity</option>
                     <option value="2">Sort by rating</option>
                     <option value="3">Sort by newness</option>
                     <option value="3">Sort by price</option>
-                  </select>
+                  </select> -->
                 </div>
               </div>
+
               <div class="row productListSingle">
                 <div
                   class="col-sm-12 "
@@ -211,15 +220,7 @@
       </div>
     </body>
     <!-- <h1>Sell Me In</h1> -->
-    <!-- <div>
-      <input
-        type="text"
-        id="search-items"
-        v-model="search"
-        placeholder="Search title..."
-      />
-      <label>Search title:</label>
-    </div> -->
+
     <!-- <div>
       <div>
         <vue-range-slider
