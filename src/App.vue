@@ -77,6 +77,16 @@
                         ></span
                       >
                     </li>
+                    <li class="account-login">
+                      <span>
+                        <router-link
+                          data-toggle="modal"
+                          data-target="#exampleModalLong2"
+                          to=""
+                          >Disclaimer</router-link
+                        ></span
+                      >
+                    </li>
                     <li class="searchBox">
                       <a href="#"><i class="fa fa-search"></i></a>
                       <ul class="dropdown-menu dropdown-menu-right">
@@ -230,6 +240,50 @@
       <router-link v-if="!isLoggedIn()" to="/login">Login</router-link> |
       <router-link v-if="isLoggedIn()" to="/logout">Logout</router-link>
     </div> -->
+    <div class="grid-wrapper section">
+      <div class="container">
+        <div class="row">
+          <div class="col-12 col-lg-12 element-content pt-5">
+            <div class="display-single_element">
+              <!-- Modal -->
+              <div
+                class="modal fade quick-view-drone"
+                id="exampleModalLong2"
+                tabindex="-1"
+                role="dialog"
+              >
+                <div class="modal-dialog">
+                  <div class="modal-content">
+                    <div class="modal-body">
+                      <button
+                        type="button"
+                        class="close"
+                        data-dismiss="modal"
+                        aria-hidden="true"
+                      >
+                        <i class="fa fa-close"></i>
+                      </button>
+                      <div class="media flex-wrap">
+                        <div class="media-body">
+                          <h2>Terms and Conditions</h2>
+                          <p>
+                            This is the agreement
+                          </p>
+                          <h2>Disclaimer</h2>
+                          <p>
+                            This is the agreement
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
     <router-view />
 
     <!-- FOOTER -->

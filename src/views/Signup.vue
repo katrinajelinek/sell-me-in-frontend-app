@@ -200,17 +200,6 @@
           <div class="row">
             <div class="col-12 col-lg-12 element-content pt-5">
               <div class="display-single_element">
-                <!-- Button trigger modal -->
-                <!-- <button
-                    type="button"
-                    class="btn btn-primary"
-                    data-toggle="modal"
-                    data-target="#exampleModalLong2"
-                  >
-                    Click here
-                  </button> -->
-
-                <!-- Modal -->
                 <div
                   class="modal fade quick-view-drone"
                   id="exampleModalLong2"
