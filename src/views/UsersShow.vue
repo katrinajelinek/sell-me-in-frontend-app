@@ -74,10 +74,13 @@
                   <div id="price-range"></div>
                 </div>
                 <input class="btn-default" type="submit" value="Filter" />
-                <!-- <span class="priceLabel">Price: <strong>$12 - $30</strong></span> -->
+                <!-- <span class="priceLabel"
+                  >Price: <strong>$12 - $30</strong></span
+                > -->
               </div>
             </div>
           </div>
+          <h1>{{ priceRange }}</h1>
           <div class="col-lg-9 col-md-8">
             <div class="row">
               <div v-if="user.posts.length == 0" class="page-title">
@@ -186,6 +189,7 @@ export default {
       boughtPostsToggle: "no",
       termsAndDisclaimerToggle: false,
       categories: [],
+      priceRange: [],
     };
   },
   created: function() {
