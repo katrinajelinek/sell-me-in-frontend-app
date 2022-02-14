@@ -44,17 +44,36 @@
                   <div class="price-slider-inner">
                     <span class="amount-wrapper">
                       Price:
-                      <input type="text" id="price-amount-1" readonly />
+                      <input
+                        type="text"
+                        id="price-amount-1"
+                        v-model="min"
+                        readonly
+                      />
                       <strong>-</strong>
-                      <input type="text" id="price-amount-2" readonly />
+                      <input
+                        type="text"
+                        id="price-amount-2"
+                        v-model="max"
+                        readonly
+                      />
                     </span>
                     <div id="price-range"></div>
                   </div>
-                  <input class="btn-default" type="submit" value="Filter" />
+                  <input
+                    class="btn-default"
+                    type="submit"
+                    value="Filter"
+                    id="range"
+                  />
                   <!-- <span class="priceLabel">Price: <strong>$12 - $30</strong></span> -->
                 </div>
               </div>
             </div>
+            {{ range }}
+            <!-- <h1 v-for="post in filterPostsByPrice">
+              {{ post }}
+            </h1> -->
             <div class="col-lg-9 col-md-8">
               <div class="row filterArea">
                 <div class="col-6">
@@ -248,17 +267,6 @@
         />
         {{ category.name }}
       </div>
-      <div
-        v-for="post in orderBy(filterBy(posts, search), sortAttribute, -1)"
-        :key="post.id"
-      >
-        <h3>
-          Made by:
-          <router-link :to="`/users/${post.user_id}`">{{
-            post.user.username
-          }}</router-link>
-        </h3>
-      </div>
     </div> -->
   </div>
 </template>
@@ -293,24 +301,32 @@ export default {
       gettingLocation: false,
       errorStr: null,
       address: "",
-      value: [0, 250],
+      range: "",
+      min: 0,
+      max: 250,
+      // value: [0, 250],
     };
   },
   created: function() {
     this.indexPosts();
     this.indexCategories();
-    this.min = 0;
-    this.max = 250;
-    this.formatter = (value) => `$${value}`;
+    // this.min = 0;
+    // this.max = 250;
+    // this.formatter = (value) => `$${value}`;
   },
   computed: {
+    filterPostsByPrice: function() {
+      return this.posts.items.filter(function(item) {
+        return item.price > this.min && item.price < this.max;
+      });
+    },
     filteredPosts() {
       return this.getByFilter(
         this.posts,
         this.categoriesFilter,
         this.locationsFilter,
         this.search,
-        this.value
+        this.range
       );
     },
   },
@@ -340,7 +356,7 @@ export default {
       categoriesFilter,
       locationsFilter,
       search,
-      value
+      range
     ) {
       if (categoriesFilter) {
         categoriesFilter.forEach((category) => {
@@ -358,7 +374,12 @@ export default {
           posts = this.filterBy(posts, word);
         });
       }
-      return posts;
+      if (range) {
+        console.log(range);
+        return this.posts.filter((post) =>
+          post.price > 0 && post.price < this.range ? post : ""
+        );
+      }
     },
   },
 };
