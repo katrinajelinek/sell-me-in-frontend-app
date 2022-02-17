@@ -144,6 +144,80 @@
                       </div>
                       <br />
                       <br />
+                      <div>
+                        <div class="form-group row">
+                          <label for="" class="col-md-3 control-label"
+                            >City</label
+                          >
+                          <div class="col-md-7">
+                            <input
+                              type="text"
+                              class="form-control"
+                              id="city"
+                              v-model="city"
+                              placeholder="City"
+                              required
+                            />
+                          </div>
+                        </div>
+                        <div class="form-group row">
+                          <label for="" class="col-md-3 control-label"></label>
+                          <div class="col-md-7">
+                            <multiselect
+                              v-model="state"
+                              :options="states"
+                              :multiple="false"
+                              :close-on-select="true"
+                              :clear-on-select="false"
+                              :preserve-search="true"
+                              placeholder="Choose your State"
+                              label="name"
+                              track-by="name"
+                              :preselect-first="true"
+                            >
+                              <template
+                                slot="selection"
+                                slot-scope="{ values, isOpen }"
+                                ><span
+                                  class="multiselect__single"
+                                  v-if="values.length &amp;&amp; !isOpen"
+                                  >{{ state }}</span
+                                ></template
+                              >
+                            </multiselect>
+                          </div>
+                        </div>
+                        <br />
+                        <div class="form-group row">
+                          <div class=" col-md-12 ">
+                            <button
+                              v-on:click="validateLocation()"
+                              class="btn btn-primary-outlined btn-sm float-right"
+                            >
+                              Validate Location
+                            </button>
+                          </div>
+                        </div>
+                        <br />
+                      </div>
+                      <div>
+                        <div class="form-group row">
+                          <label for="" class="col-md-3 control-label"
+                            >Location</label
+                          >
+                          <div class="col-md-7">
+                            <input
+                              type="text"
+                              class="form-control"
+                              id="city"
+                              v-model="location"
+                              placeholder="Location"
+                              required
+                              readonly
+                            />
+                          </div>
+                        </div>
+                      </div>
                       <div class="form-check">
                         <input
                           id="termsAndConditionsAgreement"
@@ -307,8 +381,12 @@
 
 <script>
 import axios from "axios";
+import Multiselect from "vue-multiselect";
 
 export default {
+  components: {
+    Multiselect,
+  },
   data: function() {
     return {
       firstName: "",
@@ -318,6 +396,61 @@ export default {
       email: "",
       password: "",
       passwordConfirmation: "",
+      city: "",
+      state: "",
+      location: "",
+      states: [
+        { name: "Alabama" },
+        { name: "Alaska" },
+        { name: "Arizona" },
+        { name: "Arkansas" },
+        { name: "California" },
+        { name: "Colorado" },
+        { name: "Conneticut" },
+        { name: "Deleware" },
+        { name: "Florida" },
+        { name: "Georgia" },
+        { name: "Hawaii" },
+        { name: "Idaho" },
+        { name: "Illinois" },
+        { name: "Indiana" },
+        { name: "Iowa" },
+        { name: "Kansas" },
+        { name: "Kentucky" },
+        { name: "Louisiana" },
+        { name: "Maine" },
+        { name: "Maryland" },
+        { name: "Massachusetts" },
+        { name: "Michigan" },
+        { name: "Minnesota" },
+        { name: "Mississippi" },
+        { name: "Missouri" },
+        { name: "Montana" },
+        { name: "Nebraska" },
+        { name: "Nevada" },
+        { name: "New Hampshire" },
+        { name: "New Jersey" },
+        { name: "New Mexico" },
+        { name: "New York" },
+        { name: "North Carolina" },
+        { name: "North Dakota" },
+        { name: "Ohio" },
+        { name: "Oklahoma" },
+        { name: "Oregon" },
+        { name: "Pennsylvania" },
+        { name: "Rhode Island" },
+        { name: "South Carolina" },
+        { name: "South Dakota" },
+        { name: "Tennessee" },
+        { name: "Texas" },
+        { name: "Utah" },
+        { name: "Vermont" },
+        { name: "Virginia" },
+        { name: "Washington" },
+        { name: "West Virginia" },
+        { name: "Wisconsin" },
+        { name: "Wyoming" },
+      ],
       termsAndConditionsAgreement: false,
       disclaimerAgreement: false,
       errors: [],
@@ -341,6 +474,7 @@ export default {
       }
       formData.append("password", this.password);
       formData.append("password_confirmation", this.passwordConfirmation);
+      formData.append("location", this.location);
       formData.append(
         "terms_and_conditions_agreement",
         this.termsAndConditionsAgreement
@@ -373,6 +507,20 @@ export default {
         )
         .open();
     },
+    validateLocation: function() {
+      axios
+        .get(
+          `https://us-zipcode.api.smartystreets.com/lookup?auth-id=1f0a605e-51dc-c94f-41c7-ba9353288bec&auth-token=B8M2uIdYBPXkdi1tNTII&city=${this.city}&state=${this.state.name}`
+        )
+        .then((response) => {
+          console.log(this.state);
+          console.log(this.city);
+          console.log(response.data);
+          this.location = `${response.data[0]["city_states"][0]["city"]}, ${response.data[0]["city_states"][0]["state_abbreviation"]}`;
+        });
+    },
   },
 };
 </script>
+
+<style src="vue-multiselect/dist/vue-multiselect.min.css"></style>

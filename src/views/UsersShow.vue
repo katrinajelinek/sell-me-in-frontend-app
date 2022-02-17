@@ -30,7 +30,13 @@
             <div class="panel panel-default filterNormal">
               <div class="panel-heading">{{ user.username }}</div>
               <div class="panel-body">
-                <img height="175px" :src="`${user.image_url}`" alt="" />
+                <img
+                  height="100"
+                  width="170"
+                  :src="`${user.image_url}`"
+                  alt=""
+                />
+                <br />
                 <div class="form-check">
                   <input
                     id="boughtPostsToggle"
@@ -80,7 +86,6 @@
               </div>
             </div>
           </div>
-          <h1>{{ priceRange }}</h1>
           <div class="col-lg-9 col-md-8">
             <div class="row">
               <div v-if="user.posts.length == 0" class="page-title">

@@ -31,9 +31,12 @@
                 <div class="panel-body">
                   <ul class="list-unstyled clearfix">
                     <li v-for="category in categories">
-                      <router-link :to="`/categories/${category.id}`">{{
-                        category.name
-                      }}</router-link>
+                      <input
+                        type="checkbox"
+                        v-model="categoriesFilter"
+                        v-bind:value="category.name"
+                      />
+                      {{ category.name }}
                     </li>
                   </ul>
                 </div>
@@ -94,7 +97,21 @@
                   </select> -->
                 </div>
               </div>
-
+              <div class="form-check">
+                <input
+                  type="checkbox"
+                  class="checkbox-custom form-check-input"
+                  checked="false"
+                  v-model="currentLocationToggle"
+                  true-value="yes"
+                  false-value="no"
+                />
+                <label
+                  for="checkbox-1"
+                  class="checkbox-custom-label form-check-label"
+                  >Sales in my city</label
+                >
+              </div>
               <div class="row productListSingle">
                 <div
                   class="col-sm-12 "
@@ -287,13 +304,13 @@ export default {
       posts: [],
       categories: [],
       categoriesFilter: [],
-      locationsFilter: [],
+      nearMeFilter: "no",
       locations: [],
       values: [],
-      location: null,
+      user_location: "",
       sortAttribute: "created_at",
       search: "",
-      currentLocationToggle: "yes",
+      currentLocationToggle: "no",
       // categoryToggle: "no",
       checkedCategories: [],
       latitude: null,
@@ -304,27 +321,41 @@ export default {
       range: "",
       min: 0,
       max: 250,
+      // locationToggle: "no",
       // value: [0, 250],
     };
   },
   created: function() {
     this.indexPosts();
     this.indexCategories();
+    this.showUser();
     // this.min = 0;
     // this.max = 250;
     // this.formatter = (value) => `$${value}`;
   },
-  computed: {
+  watch: {
+    currentLocationToggle: function() {
+      if (this.currentLocationToggle === "yes") {
+        this.posts = this.filterBy(this.posts, this.user_location);
+        console.log(this.posts);
+      }
+      if (this.currentLocationToggle === "no") {
+        this.indexPosts();
+        console.log(this.posts);
+      }
+    },
     filterPostsByPrice: function() {
       return this.posts.items.filter(function(item) {
         return item.price > this.min && item.price < this.max;
       });
     },
+  },
+  computed: {
     filteredPosts() {
       return this.getByFilter(
         this.posts,
         this.categoriesFilter,
-        this.locationsFilter,
+        this.currentLocationToggle,
         this.search,
         this.range
       );
@@ -342,6 +373,12 @@ export default {
         this.posts = response.data;
       });
     },
+    showUser: function() {
+      axios.get(`/api/users/${this.$parent.getUserId()}`).then((response) => {
+        console.log(response.data);
+        this.user_location = response.data.location;
+      });
+    },
     setSortAttribute: function(attribute) {
       this.sortAttribute = attribute;
     },
@@ -354,7 +391,7 @@ export default {
     getByFilter: function(
       posts,
       categoriesFilter,
-      locationsFilter,
+      currentLocationToggle,
       search,
       range
     ) {
@@ -363,11 +400,10 @@ export default {
           posts = this.filterBy(posts, category);
         });
       }
-      if (locationsFilter) {
-        locationsFilter.forEach((location) => {
-          posts = this.filterBy(posts, location);
-        });
-      }
+      // if (this.currentLocationToggle === "yes") {
+      //   console.log("loaction filter");
+      //   posts = this.filterBy(posts, this.user_location);
+      // }
       if (search) {
         search.forEach((word) => {
           console.log(word);

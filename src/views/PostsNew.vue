@@ -161,24 +161,6 @@
                         </div>
                       </div>
                       <br />
-                      <!-- <div class="form-group row">
-                        <label for="" class="col-md-3 control-label"
-                          >State</label
-                        >
-                        <div class="col-md-7">
-                          <select
-                            v-model="state"
-                            :close-on-select="true"
-                            :clear-on-select="false"
-                            :preserve-search="true"
-                            placeholder="Choose your state"
-                            :preselect-first="true"
-                          >
-                            <option disabled value="">State</option>
-                            <option v-for="state in states">{{ state }}</option>
-                          </select>
-                        </div>
-                      </div> -->
                       <div>
                         <div class="form-group row">
                           <label for="" class="col-md-3 control-label"

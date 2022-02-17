@@ -51,29 +51,33 @@
                     <img
                       :src="image.image_url"
                       type=""
-                      height="400"
-                      width="400"
+                      height="100"
+                      width="100"
                     />
+                    <br />
                     <button
                       v-on:click="destroyImage(image)"
-                      class="btn btn-primary btn-block"
+                      class="btn btn-primary btn-sm"
                     >
                       Delete Image
                     </button>
+                    <br />
                   </div>
                   <div v-for="image in imageUrls">
-                    <img :src="image" type="" height="400" width="400" />
+                    <img :src="image" type="" height="100" width="100" />
+                    <br />
                     <button
                       v-on:click="destroyImageUrl(image)"
-                      class="btn btn-primary btn-block"
+                      class="btn btn-primary btn-sm"
                     >
                       Delete Image
                     </button>
+                    <br />
                   </div>
                   <br />
                   <div>
                     <button
-                      class="btn btn-primary btn-block"
+                      class="btn btn-primary btn-sm"
                       v-on:click="openImageUploadModal()"
                     >
                       Upload more images
@@ -146,6 +150,73 @@
                             ></template
                           >
                         </multiselect>
+                      </div>
+                    </div>
+                    <div>
+                      <div class="form-group">
+                        <label for="" class="col-md-3 control-label"
+                          >City</label
+                        >
+                        <input
+                          type="text"
+                          class="form-control"
+                          id="city"
+                          v-model="city"
+                          placeholder="City"
+                        />
+                      </div>
+                      <div class="form-group">
+                        <label for="" class="col-md-3 control-label"></label>
+                        <multiselect
+                          v-model="state"
+                          :options="states"
+                          :multiple="false"
+                          :close-on-select="true"
+                          :clear-on-select="false"
+                          :preserve-search="true"
+                          placeholder="Choose your State"
+                          label="name"
+                          track-by="name"
+                          :preselect-first="true"
+                        >
+                          <template
+                            slot="selection"
+                            slot-scope="{ values, isOpen }"
+                            ><span
+                              class="multiselect__single"
+                              v-if="values.length &amp;&amp; !isOpen"
+                              >{{ state }}</span
+                            ></template
+                          >
+                        </multiselect>
+                      </div>
+                      <br />
+                      <div class="form-group">
+                        <button
+                          v-on:click="validateLocation()"
+                          class="btn btn-primary-outlined btn-sm float-right"
+                        >
+                          Validate Location
+                        </button>
+                      </div>
+                      <br />
+                    </div>
+                    <div>
+                      <div class="form-group row">
+                        <label for="" class="col-md-3 control-label"
+                          >Location</label
+                        >
+                        <div class="col-md-7">
+                          <input
+                            type="text"
+                            class="form-control"
+                            id="city"
+                            v-model="post.location"
+                            placeholder="Location"
+                            required
+                            readonly
+                          />
+                        </div>
                       </div>
                     </div>
                     <button
@@ -235,6 +306,60 @@ export default {
       errors: [],
       values: [],
       categories: [],
+      states: [
+        { name: "Alabama" },
+        { name: "Alaska" },
+        { name: "Arizona" },
+        { name: "Arkansas" },
+        { name: "California" },
+        { name: "Colorado" },
+        { name: "Conneticut" },
+        { name: "Deleware" },
+        { name: "Florida" },
+        { name: "Georgia" },
+        { name: "Hawaii" },
+        { name: "Idaho" },
+        { name: "Illinois" },
+        { name: "Indiana" },
+        { name: "Iowa" },
+        { name: "Kansas" },
+        { name: "Kentucky" },
+        { name: "Louisiana" },
+        { name: "Maine" },
+        { name: "Maryland" },
+        { name: "Massachusetts" },
+        { name: "Michigan" },
+        { name: "Minnesota" },
+        { name: "Mississippi" },
+        { name: "Missouri" },
+        { name: "Montana" },
+        { name: "Nebraska" },
+        { name: "Nevada" },
+        { name: "New Hampshire" },
+        { name: "New Jersey" },
+        { name: "New Mexico" },
+        { name: "New York" },
+        { name: "North Carolina" },
+        { name: "North Dakota" },
+        { name: "Ohio" },
+        { name: "Oklahoma" },
+        { name: "Oregon" },
+        { name: "Pennsylvania" },
+        { name: "Rhode Island" },
+        { name: "South Carolina" },
+        { name: "South Dakota" },
+        { name: "Tennessee" },
+        { name: "Texas" },
+        { name: "Utah" },
+        { name: "Vermont" },
+        { name: "Virginia" },
+        { name: "Washington" },
+        { name: "West Virginia" },
+        { name: "Wisconsin" },
+        { name: "Wyoming" },
+      ],
+      state: "",
+      city: "",
     };
   },
   created: function() {
@@ -377,6 +502,18 @@ export default {
           this.$router.push(`/users/${this.post.user_id}`);
         });
       }
+    },
+    validateLocation: function() {
+      axios
+        .get(
+          `https://us-zipcode.api.smartystreets.com/lookup?auth-id=1f0a605e-51dc-c94f-41c7-ba9353288bec&auth-token=B8M2uIdYBPXkdi1tNTII&city=${this.city}&state=${this.state.name}`
+        )
+        .then((response) => {
+          console.log(this.state);
+          console.log(this.city);
+          console.log(response.data);
+          this.location = `${response.data[0]["city_states"][0]["city"]}, ${response.data[0]["city_states"][0]["state_abbreviation"]}`;
+        });
     },
   },
 };
