@@ -48,14 +48,14 @@
                     <span class="amount-wrapper">
                       Price:
                       <input
-                        type="text"
+                        type="number"
                         id="price-amount-1"
                         v-model="min"
                         readonly
                       />
                       <strong>-</strong>
                       <input
-                        type="text"
+                        type="number"
                         id="price-amount-2"
                         v-model="max"
                         readonly
@@ -63,17 +63,19 @@
                     </span>
                     <div id="price-range"></div>
                   </div>
-                  <input
-                    class="btn-default"
+                  <button
                     type="submit"
+                    class="btn-default"
                     value="Filter"
-                    id="range"
-                  />
+                    id="priceFilter"
+                    v-on:click="priceFilter = true"
+                  >
+                    Filter
+                  </button>
                   <!-- <span class="priceLabel">Price: <strong>$12 - $30</strong></span> -->
                 </div>
               </div>
             </div>
-            {{ range }}
             <!-- <h1 v-for="post in filterPostsByPrice">
               {{ post }}
             </h1> -->
@@ -302,12 +304,13 @@ export default {
   data: function() {
     return {
       posts: [],
+      allPosts: [],
       categories: [],
       categoriesFilter: [],
       nearMeFilter: "no",
       locations: [],
       values: [],
-      user_location: "",
+      userLocation: "",
       sortAttribute: "created_at",
       search: "",
       currentLocationToggle: "no",
@@ -318,9 +321,9 @@ export default {
       gettingLocation: false,
       errorStr: null,
       address: "",
-      range: "",
-      min: 0,
-      max: 250,
+      priceFilter: false,
+      min: 2,
+      max: 1000,
       // locationToggle: "no",
       // value: [0, 250],
     };
@@ -336,7 +339,7 @@ export default {
   watch: {
     currentLocationToggle: function() {
       if (this.currentLocationToggle === "yes") {
-        this.posts = this.filterBy(this.posts, this.user_location);
+        this.posts = this.filterBy(this.posts, this.userLocation);
         console.log(this.posts);
       }
       if (this.currentLocationToggle === "no") {
@@ -344,10 +347,18 @@ export default {
         console.log(this.posts);
       }
     },
-    filterPostsByPrice: function() {
-      return this.posts.items.filter(function(item) {
-        return item.price > this.min && item.price < this.max;
-      });
+    priceFilter: function() {
+      if (this.priceFilter === true) {
+        this.allPosts = this.posts;
+        this.posts.forEach((post) => {
+          if (
+            !(Number(post.price) > this.min && Number(post.price) < this.max)
+          ) {
+            var index = this.posts.indexOf(post);
+            this.posts.splice(index, 1);
+          }
+        });
+      }
     },
   },
   computed: {
@@ -356,8 +367,7 @@ export default {
         this.posts,
         this.categoriesFilter,
         this.currentLocationToggle,
-        this.search,
-        this.range
+        this.search
       );
     },
   },
@@ -376,7 +386,7 @@ export default {
     showUser: function() {
       axios.get(`/api/users/${this.$parent.getUserId()}`).then((response) => {
         console.log(response.data);
-        this.user_location = response.data.location;
+        this.userLocation = response.data.location;
       });
     },
     setSortAttribute: function(attribute) {
@@ -388,33 +398,17 @@ export default {
         this.categories = response.data;
       });
     },
-    getByFilter: function(
-      posts,
-      categoriesFilter,
-      currentLocationToggle,
-      search,
-      range
-    ) {
+    getByFilter: function(posts, categoriesFilter, search) {
       if (categoriesFilter) {
         categoriesFilter.forEach((category) => {
           posts = this.filterBy(posts, category);
         });
       }
-      // if (this.currentLocationToggle === "yes") {
-      //   console.log("loaction filter");
-      //   posts = this.filterBy(posts, this.user_location);
-      // }
       if (search) {
         search.forEach((word) => {
           console.log(word);
           posts = this.filterBy(posts, word);
         });
-      }
-      if (range) {
-        console.log(range);
-        return this.posts.filter((post) =>
-          post.price > 0 && post.price < this.range ? post : ""
-        );
       }
     },
   },
