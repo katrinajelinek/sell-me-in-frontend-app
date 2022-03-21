@@ -114,74 +114,90 @@
                   >Sales in my city</label
                 >
               </div>
-              <div class="row productListSingle">
-                <div
-                  class="col-sm-12 "
-                  v-for="post in orderBy(
-                    filterBy(posts, search),
-                    sortAttribute,
-                    -1
-                  )"
-                  :key="post.id"
-                >
-                  <div class="media flex-wrap productBox">
-                    <div class="media-left">
-                      <div class="productImage clearfix">
-                        <div
-                          class="fluid-width-video-wrapper"
-                          style="padding-top: 56.2%;"
-                        >
-                          <iframe
-                            :src="`${post.video_url}`"
-                            frameborder="0"
-                            webkitallowfullscreen
-                            mozallowfullscreen
-                            allowfullscreen
-                          ></iframe>
+              <div v-if="categoriesFilter.length > 0">
+                <div class="row productListSingle">
+                  <div
+                    class="col-sm-12 "
+                    v-for="post in orderBy(
+                      filterBy(categoryFilteredPosts, search),
+                      sortAttribute,
+                      -1
+                    )"
+                    :key="post.id"
+                  >
+                    <div class="media flex-wrap productBox">
+                      <div class="media-left">
+                        <div class="productImage clearfix">
+                          <div
+                            class="fluid-width-video-wrapper"
+                            style="padding-top: 56.2%;"
+                          >
+                            <iframe
+                              :src="`${post.video_url}`"
+                              frameborder="0"
+                              webkitallowfullscreen
+                              mozallowfullscreen
+                              allowfullscreen
+                            ></iframe>
+                          </div>
                         </div>
-                        <!-- <div class="productMasking">
-                          <ul class="list-inline btn-group" role="group">
-                            <li>
-                              <a class="btn btn-default btn-wishlist"
-                                ><i class="fa fa-heart-o"></i
-                              ></a>
-                            </li>
-                            <li>
-                              <a
-                                href="javascript:void(0)"
-                                class="btn btn-default"
-                                data-toast
-                                data-toast-type="success"
-                                data-toast-position="topRight"
-                                data-toast-icon="icon-circle-check"
-                                data-toast-title="Product"
-                                data-toast-message="successfuly added to cart!"
-                                ><i class="fa fa-shopping-basket"></i
-                              ></a>
-                            </li>
-                            <li>
-                              <a
-                                class="btn btn-default"
-                                data-toggle="modal"
-                                href=".quick-view"
-                                ><i class="fa fa-eye"></i
-                              ></a>
-                            </li>
-                          </ul>
-                        </div> -->
+                      </div>
+                      <div class="media-body">
+                        <h4 class="media-heading">
+                          <router-link :to="`/posts/${post.id}`">{{
+                            post.title
+                          }}</router-link>
+                        </h4>
+                        <p>{{ post.location }}</p>
+                        <p>
+                          {{ post.description }}
+                        </p>
+                        <h3>${{ post.price }}</h3>
                       </div>
                     </div>
-                    <div class="media-body">
-                      <h4 class="media-heading">
-                        <router-link :to="`/posts/${post.id}`">{{
-                          post.title
-                        }}</router-link>
-                      </h4>
-                      <p>{{ post.location }}</p>
-                      <p>
-                        {{ post.description }}
-                      </p>
-                      <h3>${{ post.price }}</h3>
+                  </div>
+                </div>
+              </div>
+              <div v-if="categoriesFilter.length === 0">
+                <div class="row productListSingle">
+                  <div
+                    class="col-sm-12 "
+                    v-for="post in orderBy(
+                      filterBy(posts, search),
+                      sortAttribute,
+                      -1
+                    )"
+                    :key="post.id"
+                  >
+                    <div class="media flex-wrap productBox">
+                      <div class="media-left">
+                        <div class="productImage clearfix">
+                          <div
+                            class="fluid-width-video-wrapper"
+                            style="padding-top: 56.2%;"
+                          >
+                            <iframe
+                              :src="`${post.video_url}`"
+                              frameborder="0"
+                              webkitallowfullscreen
+                              mozallowfullscreen
+                              allowfullscreen
+                            ></iframe>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="media-body">
+                        <h4 class="media-heading">
+                          <router-link :to="`/posts/${post.id}`">{{
+                            post.title
+                          }}</router-link>
+                        </h4>
+                        <p>{{ post.location }}</p>
+                        <p>
+                          {{ post.description }}
+                        </p>
+                        <h3>${{ post.price }}</h3>
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -305,6 +321,7 @@ export default {
     return {
       posts: [],
       allPosts: [],
+      categoryFilteredPosts: [],
       categories: [],
       categoriesFilter: [],
       nearMeFilter: "no",
@@ -360,6 +377,19 @@ export default {
         });
       }
     },
+    categoriesFilter: function() {
+      if (this.categoriesFilter) {
+        this.categoryFilteredPosts = this.filterBy(
+          this.posts,
+          this.categoriesFilter
+        );
+        console.log(this.categoryFilteredPosts);
+        //   categoriesFilter.forEach((category) => {
+        //   this.posts = this.filterBy(posts, category);
+        // });
+        // console.log(this.posts);
+      }
+    },
   },
   computed: {
     filteredPosts() {
@@ -401,8 +431,9 @@ export default {
     getByFilter: function(posts, categoriesFilter, search) {
       if (categoriesFilter) {
         categoriesFilter.forEach((category) => {
-          posts = this.filterBy(posts, category);
+          this.posts = this.filterBy(posts, category);
         });
+        console.log(this.posts);
       }
       if (search) {
         search.forEach((word) => {
