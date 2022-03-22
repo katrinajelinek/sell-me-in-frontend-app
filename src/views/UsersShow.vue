@@ -31,8 +31,8 @@
               <div class="panel-heading">{{ user.username }}</div>
               <div class="panel-body">
                 <img
-                  height="100"
-                  width="170"
+                  height="160"
+                  width="160"
                   :src="`${user.image_url}`"
                   alt=""
                 />
@@ -53,6 +53,15 @@
                     >Show already bought posts</label
                   >
                 </div>
+                <div v-if="$parent.getUserId() == user.id">
+                  <button
+                    type="button"
+                    class="btn btn-primary btn-sm"
+                    v-on:click="pushToUserEdit()"
+                  >
+                    Edit Profile
+                  </button>
+                </div>
               </div>
             </div>
             <div class="panel panel-default filterNormal">
@@ -60,11 +69,16 @@
               <div class="panel-body">
                 <ul class="list-unstyled clearfix">
                   <li v-for="category in categories">
-                    <router-link :to="`/categories/${category.id}`">{{
-                      category.name
-                    }}</router-link>
+                    <input
+                      type="checkbox"
+                      v-model="categoriesFilter"
+                      v-bind:value="category.name"
+                    />
+                    {{ category.name }}
                   </li>
                 </ul>
+                {{ categoriesFilter }}
+                {{ categoryFilteredPosts }}
               </div>
             </div>
             <div class="panel panel-default priceRange">
@@ -91,44 +105,17 @@
               <div v-if="user.posts.length == 0" class="page-title">
                 <h2>This seller hasn't created any posts yet</h2>
               </div>
-              <div class="col-md-6 col-lg-4" v-for="post in user.posts">
-                <div v-if="post.bought == false">
-                  <div class="productBox">
-                    <div class="productImage clearfix">
-                      <iframe
-                        :src="`${post.video_url}`"
-                        frameborder="0"
-                        webkitallowfullscreen
-                        mozallowfullscreen
-                        allowfullscreen
-                      ></iframe>
-                    </div>
-                    <div class="productCaption clearfix">
-                      <div v-if="$parent.getUserId() == post.user_id">
-                        <button
-                          v-on:click="updatePost(post)"
-                          class="btn btn-info btn-rounded btn-sm"
-                        >
-                          Mark post as bought
-                        </button>
-                        <br />
-                        <br />
-                      </div>
-                      <h4 class="media-heading">
-                        <router-link :to="`/posts/${post.id}`">{{
-                          post.title
-                        }}</router-link>
-                      </h4>
-                      <p>
-                        {{ post.description }}
-                      </p>
-                      <p>{{ post.location }}</p>
-                      <h3>${{ post.price }}</h3>
-                    </div>
-                  </div>
-                </div>
-                <div v-if="boughtPostsToggle == 'yes'">
-                  <div v-if="post.bought">
+              <div v-if="categoriesFilter.length === 0">
+                <div
+                  class="col-sm-12 "
+                  v-for="post in orderBy(
+                    filterBy(user.posts, search),
+                    sortAttribute,
+                    -1
+                  )"
+                  :key="post.id"
+                >
+                  <div v-if="post.bought == false">
                     <div class="productBox">
                       <div class="productImage clearfix">
                         <iframe
@@ -140,6 +127,16 @@
                         ></iframe>
                       </div>
                       <div class="productCaption clearfix">
+                        <div v-if="$parent.getUserId() == post.user_id">
+                          <button
+                            v-on:click="updatePost(post)"
+                            class="btn btn-info btn-rounded btn-sm"
+                          >
+                            Mark post as bought
+                          </button>
+                          <br />
+                          <br />
+                        </div>
                         <h4 class="media-heading">
                           <router-link :to="`/posts/${post.id}`">{{
                             post.title
@@ -153,6 +150,108 @@
                       </div>
                     </div>
                   </div>
+                  <div v-if="boughtPostsToggle == 'yes'">
+                    <div v-if="post.bought">
+                      <div class="productBox">
+                        <div class="productImage clearfix">
+                          <iframe
+                            :src="`${post.video_url}`"
+                            frameborder="0"
+                            webkitallowfullscreen
+                            mozallowfullscreen
+                            allowfullscreen
+                          ></iframe>
+                        </div>
+                        <div class="productCaption clearfix">
+                          <h4 class="media-heading">
+                            <router-link :to="`/posts/${post.id}`">{{
+                              post.title
+                            }}</router-link>
+                          </h4>
+                          <p>
+                            {{ post.description }}
+                          </p>
+                          <p>{{ post.location }}</p>
+                          <h3>${{ post.price }}</h3>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div v-if="categoriesFilter.length > 0">
+                <div
+                  class="col-sm-12 "
+                  v-for="post in orderBy(
+                    filterBy(categoryFilteredPosts, search),
+                    sortAttribute,
+                    -1
+                  )"
+                  :key="post.id"
+                >
+                  <div v-if="post.bought == false">
+                    <div class="productBox">
+                      <div class="productImage clearfix">
+                        <iframe
+                          :src="`${post.video_url}`"
+                          frameborder="0"
+                          webkitallowfullscreen
+                          mozallowfullscreen
+                          allowfullscreen
+                        ></iframe>
+                      </div>
+                      <div class="productCaption clearfix">
+                        <div v-if="$parent.getUserId() == post.user_id">
+                          <button
+                            v-on:click="updatePost(post)"
+                            class="btn btn-info btn-rounded btn-sm"
+                          >
+                            Mark post as bought
+                          </button>
+                          <br />
+                          <br />
+                        </div>
+                        <h4 class="media-heading">
+                          <router-link :to="`/posts/${post.id}`">{{
+                            post.title
+                          }}</router-link>
+                        </h4>
+                        <p>
+                          {{ post.description }}
+                        </p>
+                        <p>{{ post.location }}</p>
+                        <h3>${{ post.price }}</h3>
+                      </div>
+                    </div>
+                  </div>
+                  <div v-if="boughtPostsToggle == 'yes'">
+                    <div v-if="post.bought">
+                      <div class="productBox">
+                        <div class="productImage clearfix">
+                          <iframe
+                            :src="`${post.video_url}`"
+                            frameborder="0"
+                            webkitallowfullscreen
+                            mozallowfullscreen
+                            allowfullscreen
+                          ></iframe>
+                        </div>
+                        <div class="productCaption clearfix">
+                          <h4 class="media-heading">
+                            <router-link :to="`/posts/${post.id}`">{{
+                              post.title
+                            }}</router-link>
+                          </h4>
+                          <p>
+                            {{ post.description }}
+                          </p>
+                          <p>{{ post.location }}</p>
+                          <h3>${{ post.price }}</h3>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
@@ -160,24 +259,6 @@
         </div>
       </div>
     </section>
-
-    <!-- </div> -->
-    <div v-if="$parent.getUserId() == user.id">
-      <router-link :to="`/users/edit/${user.id}`"
-        >Edit your Profile</router-link
-      >
-      <br />
-      <router-link to="/posts/new">Create a Post</router-link>
-    </div>
-    <!-- <div>
-      <input
-        type="checkbox"
-        v-model="boughtPostsToggle"
-        true-value="yes"
-        false-value="no"
-      />
-      <label>Show already bought posts</label>
-    </div> -->
   </div>
 </template>
 
@@ -185,12 +266,19 @@
 
 <script>
 import axios from "axios";
+import Vue2Filters from "vue2-filters";
+
 export default {
+  mixins: [Vue2Filters.mixin],
   data: function() {
     return {
       user: {
         posts: [],
       },
+      search: "",
+      sortAttribute: "created_at",
+      categoryFilteredPosts: [],
+      categoriesFilter: [],
       boughtPostsToggle: "no",
       termsAndDisclaimerToggle: false,
       categories: [],
@@ -200,6 +288,26 @@ export default {
   created: function() {
     this.showUser();
     this.indexCategories();
+  },
+  watch: {
+    categoriesFilter: function() {
+      if (this.categoriesFilter) {
+        this.categoryFilteredPosts = this.filterBy(
+          this.user.posts,
+          this.categoriesFilter
+        );
+        console.log(this.categoryFilteredPosts);
+      }
+    },
+  },
+  computed: {
+    filteredPosts() {
+      return this.getByFilter(
+        this.user.posts,
+        this.categoriesFilter,
+        this.search
+      );
+    },
   },
   methods: {
     showUser: function() {
@@ -229,6 +337,23 @@ export default {
         .catch((error) => {
           this.errors = error.response.data.errors;
         });
+    },
+    pushToUserEdit: function() {
+      this.$router.push(`/users/edit/${this.user.id}`);
+    },
+    getByFilter: function(posts, categoriesFilter, search) {
+      if (categoriesFilter) {
+        categoriesFilter.forEach((category) => {
+          this.posts = this.filterBy(posts, category);
+        });
+        console.log(this.posts);
+      }
+      if (search) {
+        search.forEach((word) => {
+          console.log(word);
+          posts = this.filterBy(posts, word);
+        });
+      }
     },
   },
 };

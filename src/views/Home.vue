@@ -384,10 +384,6 @@ export default {
           this.categoriesFilter
         );
         console.log(this.categoryFilteredPosts);
-        //   categoriesFilter.forEach((category) => {
-        //   this.posts = this.filterBy(posts, category);
-        // });
-        // console.log(this.posts);
       }
     },
   },
