@@ -27,7 +27,7 @@
           <div class="row">
             <div class="col-lg-3 col-md-4 sideBar">
               <div class="panel panel-default filterNormal">
-                <div class="panel-heading">Product Categories</div>
+                <div class="panel-heading">Filter by Categories</div>
                 <div class="panel-body">
                   <ul class="list-unstyled clearfix">
                     <li v-for="category in categories">
@@ -41,7 +41,7 @@
                   </ul>
                 </div>
               </div>
-              <div class="panel panel-default priceRange">
+              <!-- <div class="panel panel-default priceRange">
                 <div class="panel-heading">Filter by Price</div>
                 <div class="panel-body clearfix">
                   <div class="price-slider-inner">
@@ -50,29 +50,47 @@
                       <input
                         type="number"
                         id="price-amount-1"
-                        v-model="min"
-                        readonly
+                        v-model.number="min"
                       />
                       <strong>-</strong>
                       <input
                         type="number"
                         id="price-amount-2"
-                        v-model="max"
-                        readonly
+                        v-model.number="max"
                       />
                     </span>
                     <div id="price-range"></div>
                   </div>
-                  <button
-                    type="submit"
+                  <input
                     class="btn-default"
+                    type="submit"
                     value="Filter"
-                    id="priceFilter"
-                    v-on:click="priceFilter = true"
+                    v-model="priceFilter"
+                  />
+                  <span class="priceLabel"
+                    >Price: <strong>$12 - $30</strong></span
                   >
-                    Filter
-                  </button>
-                  <!-- <span class="priceLabel">Price: <strong>$12 - $30</strong></span> -->
+                </div>
+                {{ priceFilter }}
+                {{ min }}
+                {{ max }}
+              </div> -->
+              <div class="panel panel-default priceRange">
+                <div class="panel-heading">Filter by Price</div>
+                <div class="panel-body clearfix">
+                  <div class="price-slider-inner">
+                    <span class="amount-wrapper">
+                      Price:
+                      <input type="text" id="price-amount-1" v-model="min" />
+                      <strong>-</strong>
+                      <input type="text" id="price-amount-2" v-model="max" />
+                    </span>
+                    <div id="price-range"></div>
+                  </div>
+                  <input class="btn-default" type="submit" value="Filter" />
+                  <!-- <span class="priceLabel"
+                    >Price: <strong>$12 - $30</strong></span
+                  > -->
                 </div>
               </div>
             </div>
@@ -338,7 +356,7 @@ export default {
       gettingLocation: false,
       errorStr: null,
       address: "",
-      priceFilter: false,
+      priceFilter: "",
       min: 2,
       max: 1000,
       // locationToggle: "no",

@@ -267,6 +267,8 @@ export default {
   },
   data: function() {
     return {
+      auth_id: process.env.VUE_APP_STREETSMARTS_AUTH_ID,
+      auth_token: process.env.VUE_APP_STREETSMARTS_AUTH_TOKEN,
       title: "",
       price: "",
       location: "",
@@ -373,8 +375,8 @@ export default {
       window.cloudinary
         .openUploadWidget(
           {
-            cloud_name: "djka3ehcg",
-            upload_preset: "musnwcbj",
+            cloud_name: process.env.VUE_APP_CLOUD_NAME,
+            upload_preset: process.env.VUE_APP_CLOUD_PRESET,
           },
           (error, result) => {
             if (!error && result && result.event === "success") {
@@ -388,12 +390,9 @@ export default {
     validateLocation: function() {
       axios
         .get(
-          `https://us-zipcode.api.smartystreets.com/lookup?auth-id=1f0a605e-51dc-c94f-41c7-ba9353288bec&auth-token=B8M2uIdYBPXkdi1tNTII&city=${this.city}&state=${this.state.name}`
+          `https://us-zipcode.api.smartystreets.com/lookup?auth-id=${this.auth_id}&auth-token=${this.auth_token}&city=${this.city}&state=${this.state.name}`
         )
         .then((response) => {
-          console.log(this.state);
-          console.log(this.city);
-          console.log(response.data);
           this.location = `${response.data[0]["city_states"][0]["city"]}, ${response.data[0]["city_states"][0]["state_abbreviation"]}`;
         });
     },
