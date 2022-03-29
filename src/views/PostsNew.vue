@@ -64,12 +64,14 @@
                     <br />
                     <div v-for="image in imageUrls">
                       <img :src="image" height="100" width="100" />
+                      <br />
                       <button
                         v-on:click="destroyImageUrl(image)"
                         class="btn btn-primary-outlined btn-sm"
                       >
                         Delete Image
                       </button>
+                      <br />
                       <br />
                     </div>
                   </div>

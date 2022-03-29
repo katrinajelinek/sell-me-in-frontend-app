@@ -77,8 +77,6 @@
                     {{ category.name }}
                   </li>
                 </ul>
-                {{ categoriesFilter }}
-                {{ categoryFilteredPosts }}
               </div>
             </div>
             <div class="panel panel-default priceRange">
