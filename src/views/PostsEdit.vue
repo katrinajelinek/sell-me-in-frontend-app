@@ -506,7 +506,7 @@ export default {
     validateLocation: function() {
       axios
         .get(
-          `https://us-zipcode.api.smartystreets.com/lookup?auth-id=1f0a605e-51dc-c94f-41c7-ba9353288bec&auth-token=B8M2uIdYBPXkdi1tNTII&city=${this.city}&state=${this.state.name}`
+          `https://us-zipcode.api.smartystreets.com/lookup?auth-id=${process.env.VUE_APP_STREETSMARTS_AUTH_ID}&auth-token=${process.env.VUE_APP_STREETSMARTS_AUTH_TOKEN}&city=${this.city}&state=${this.state.name}`
         )
         .then((response) => {
           console.log(this.state);
