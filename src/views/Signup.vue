@@ -141,7 +141,7 @@
                       </div>
                       <br />
                       <br />
-                      <div>
+                      <!-- <div>
                         <div class="form-group row">
                           <label for="" class="col-md-3 control-label"
                             >City</label
@@ -214,7 +214,7 @@
                             />
                           </div>
                         </div>
-                      </div>
+                      </div> -->
                       <div class="form-check">
                         <input
                           id="termsAndConditionsAgreement"
@@ -382,7 +382,7 @@ import Multiselect from "vue-multiselect";
 
 export default {
   components: {
-    Multiselect,
+    // Multiselect,
   },
   data: function() {
     return {
@@ -395,7 +395,7 @@ export default {
       passwordConfirmation: "",
       city: "",
       state: "",
-      location: "",
+      location: "Colorado Springs, CO",
       states: [
         { name: "Alabama" },
         { name: "Alaska" },
