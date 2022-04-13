@@ -141,7 +141,7 @@
                       </div>
                       <br />
                       <br />
-                      <!-- <div>
+                      <div>
                         <div class="form-group row">
                           <label for="" class="col-md-3 control-label"
                             >City</label
@@ -214,7 +214,7 @@
                             />
                           </div>
                         </div>
-                      </div> -->
+                      </div>
                       <div class="form-check">
                         <input
                           id="termsAndConditionsAgreement"

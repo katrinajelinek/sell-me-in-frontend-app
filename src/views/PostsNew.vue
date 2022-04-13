@@ -163,7 +163,7 @@
                         </div>
                       </div>
                       <br />
-                      <div>
+                      <!-- <div>
                         <div class="form-group row">
                           <label for="" class="col-md-3 control-label"
                             >City</label
@@ -236,7 +236,7 @@
                             />
                           </div>
                         </div>
-                      </div>
+                      </div> -->
                       <div class="form-group row">
                         <div class=" col-md-12 ">
                           <button
@@ -273,7 +273,7 @@ export default {
       auth_token: process.env.VUE_APP_STREETSMARTS_AUTH_TOKEN,
       title: "",
       price: "",
-      location: "",
+      location: "Colorado Springs, CO",
       description: "",
       video: "",
       imageUrl: "",
